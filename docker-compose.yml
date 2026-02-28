@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql-salao-carmem
+    environment:
+      MYSQL_DATABASE: salao_db
+      MYSQL_ROOT_PASSWORD: admin
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_salao_data:/var/lib/mysql
+
+volumes:
+  mysql_salao_data:
