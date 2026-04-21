@@ -16,7 +16,9 @@ public class ClienteService {
     private final ClienteRepository repository;
 
     public Cliente salvar(Cliente cliente) {
-        //  criar um validador de CPF e depois adicionar
+        if (repository.existsByTelefone(cliente.getTelefone())) {
+            throw new RuntimeException("Este número de WhatsApp já está cadastrado para outro cliente!");
+        }
         return repository.save(cliente);
     }
 
@@ -26,7 +28,7 @@ public class ClienteService {
         }
         return repository.save(cliente);
     }
-
+    //Ve com o professor se mantenho o metodo deletar ou mudar apenas o status
     public void deletar(Long id) {
         if (!repository.existsById(id)) {
             throw new RuntimeException("Não é possível deletar: Cliente não encontrado.");

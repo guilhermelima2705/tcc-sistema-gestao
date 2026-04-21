@@ -4,6 +4,8 @@ package com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name="cliente")
 @Data
@@ -15,10 +17,14 @@ public class Cliente {
    private Long id;
     @Column(name="nome", length = 100, nullable = false)
    private String nome;
-    @Column(name="telefone", length = 10, nullable = false)
+    @Column(name="telefone", length = 15, nullable = false)
    private String telefone;
     @Column(name="cpf", length = 10, nullable = true)
    private String cpf;
+    @Column(name="data_nascimento", nullable = false)
+    private LocalDate dataNascimento;
+    @Column(name="ativo")
+    private Boolean ativo = true;
     @Column(name="observacoes", length = 300, nullable = true)
    private String observacoes;
 

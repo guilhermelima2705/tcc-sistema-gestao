@@ -5,6 +5,7 @@ import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.enums.TipoDeL
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Entity
@@ -19,8 +20,8 @@ public class LancamentoFinanceiro {
     @Column(name="descricao", length = 200, nullable = true)
     private String descricao;
     @Column(name="valor", length = 10, nullable = false)
-    private Double valor;
-    @Column(name="lacamento", length = 50, nullable = false)
+    private BigDecimal valor;
+    @Column(name="lancamento", length = 50, nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoDeLancamento tipo;
     @Column(name="categoria", length = 50, nullable = false)
@@ -32,7 +33,7 @@ public class LancamentoFinanceiro {
     public LancamentoFinanceiro() {
     }
 
-    public LancamentoFinanceiro(Long id, String descricao, Double valor, TipoDeLancamento tipo, CategoriaDeLancamento categoria, LocalDateTime data) {
+    public LancamentoFinanceiro(Long id, String descricao, BigDecimal valor, TipoDeLancamento tipo, CategoriaDeLancamento categoria, LocalDateTime data) {
         Id = id;
         this.descricao = descricao;
         this.valor = valor;
