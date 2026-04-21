@@ -9,11 +9,13 @@ import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.enums.TipoDeL
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service
-@RequiredArgsConstructor
+//A camada service é a camada onde vamos colocar todas as validações e todos os metodos que o sistema vai trabalhar
+@Service  //define essa classe como service
+@RequiredArgsConstructor    //Cria um construtor
 public class AgendamentoService {
 
    private final AgendamentoRepository agendamentoRepository;
@@ -59,9 +61,14 @@ public class AgendamentoService {
     }
 
 
+    @Transactional
     public void finalizarAtendimento(Long id) {
+
         Agendamento agendamento = agendamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Agendamento não encontrado para finalizar."));
         agendamento.setStatus(Status.CONFIRMADO);
+        if (Status.CONFIRMADO.equals(agendamento.getStatus())) {
+            throw new RuntimeException("Este atendimento já foi finalizado anteriormente!");
+        }
         agendamentoRepository.save(agendamento);
 
         LancamentoFinanceiro entrada = new LancamentoFinanceiro();

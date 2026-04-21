@@ -3,7 +3,6 @@ package com.guilherme.aulaspring.projetofinalsalaocarmemlucia.service;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.Servico;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.repository.ServicoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
@@ -36,6 +35,14 @@ public class ServicoService {
         repository.deleteById(id);
     }
 
+    public List<Servico> listarTodos() {
+        return repository.findAll();
+    }
+
+    public Servico buscarPorId(Long id) {
+        return repository.findById(id).orElseThrow(() -> new RuntimeException("Serviço não encontrado!"));
+    }
+
     public List<Servico> findByNome(String nome){
         if (nome == null || nome.trim().isEmpty()) {
             return repository.findAll();
@@ -52,5 +59,6 @@ public class ServicoService {
         Example<Servico> servicoExample = Example.of(service, matcher);
         return repository.findAll(servicoExample);
     }
+
 
 }

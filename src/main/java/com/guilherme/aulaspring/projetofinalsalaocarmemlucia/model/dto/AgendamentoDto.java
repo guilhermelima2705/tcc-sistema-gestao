@@ -17,7 +17,7 @@ public record AgendamentoDto(
         Long servicoId,
 
         @NotNull(message = "A data e hora são obrigatórias")
-        @Past(message = "O agendamento deve ser para uma data futura")
+        @Future(message = "O agendamento deve ser para uma data futura")
         LocalDateTime dataHora
 ) {
 }

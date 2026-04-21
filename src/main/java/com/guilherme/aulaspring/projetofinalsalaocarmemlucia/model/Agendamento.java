@@ -3,13 +3,15 @@ package com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.enums.Status;
 import jakarta.persistence.*;
 import lombok.Data;
-import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name="agendamento")
-@Data
+//A camada model serão as classes do nosso sistema, onde nela vão ter as nossas entidades e tabelas que vão esta no banco de dados
+//No spring boot utilizamos annotations para classificar e facilitar na hora de escrever o codigo, tem algumas annotations que importam alguns codigos e metodos
+
+@Entity     //defini que essa classe é uma entidade para o banco
+@Table(name="agendamento")   //define o nome como vai ser salvo no banco
+@Data  //essa annotation serve para criar get/set, hash code e equals e os contrutores e forma automatica
 public class Agendamento {
 
     @Id

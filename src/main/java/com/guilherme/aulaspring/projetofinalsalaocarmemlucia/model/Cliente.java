@@ -32,13 +32,13 @@ public class Cliente {
     public Cliente() {
     }
 
-    public Cliente(Long id, String nome, String telefone, String cpf, String observacoes) {
+    public Cliente(Long id, String nome, String telefone, String cpf, LocalDate dataNascimento, Boolean ativo, String observacoes) {
         this.id = id;
         this.nome = nome;
         this.telefone = telefone;
         this.cpf = cpf;
+        this.dataNascimento = dataNascimento;
+        this.ativo = ativo;
         this.observacoes = observacoes;
     }
-
-
 }

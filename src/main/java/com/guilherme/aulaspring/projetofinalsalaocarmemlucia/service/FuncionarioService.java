@@ -35,6 +35,11 @@ public class FuncionarioService {
         repository.deleteById(id);
     }
 
+    public List<Funcionario> listarTodos() {
+
+        return repository.findAll();
+    }
+
     public List<Funcionario> findByNome(String nome){
         if (nome == null || nome.trim().isEmpty()) {
             return repository.findAll();

@@ -15,7 +15,7 @@ public class ClienteService {
 
     private final ClienteRepository repository;
 
-    public Cliente salvar(Cliente cliente) {
+    public Cliente cadastrar(Cliente cliente) {
         if (repository.existsByTelefone(cliente.getTelefone())) {
             throw new RuntimeException("Este número de WhatsApp já está cadastrado para outro cliente!");
         }
@@ -37,6 +37,7 @@ public class ClienteService {
     }
 
     public List<Cliente> listarTodos() {
+
         return repository.findAll();
     }
 
@@ -46,14 +47,14 @@ public class ClienteService {
     }
 
     // Descidir se vou cadastrar o CPF mesmo no sistema, mas ja colocar o metododo para pesquisar um ou outro
-    public List<Cliente> buscaPersonalizada(String termo) {
-        if (termo == null || termo.trim().isEmpty()) {
+    public List<Cliente> buscaPersonalizada(String filtro) {
+        if (filtro == null || filtro.trim().isEmpty()) {
             return repository.findAll();
         }
 
-        Cliente filtro = new Cliente();
-        filtro.setNome(termo);
-        filtro.setCpf(termo);
+        Cliente filtros = new Cliente();
+        filtros.setNome(filtro);
+        filtros.setCpf(filtro);
 
         ExampleMatcher matcher = ExampleMatcher.matchingAny()
                 .withIgnorePaths("id", "telefone", "observacoes")
@@ -61,6 +62,6 @@ public class ClienteService {
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        return repository.findAll(Example.of(filtro, matcher));
+        return repository.findAll(Example.of(filtros, matcher));
     }
 }
