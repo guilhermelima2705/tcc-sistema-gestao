@@ -41,6 +41,29 @@ public class AgendamentoController {
 
     @GetMapping
     public ResponseEntity<List<Agendamento>> listarTodos() {
+
         return ResponseEntity.ok(service.listarTodos());
+    }
+
+    // Endpoint para buscar apenas UM agendamento pelo ID
+    @GetMapping("/{id}")
+    public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
+        try {
+            Agendamento agendamento = service.buscarPorId(id);
+            return ResponseEntity.ok(agendamento);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
+    // Endpoint para deletar um agendamento
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletar(@PathVariable Long id) {
+        try {
+            service.deletar(id);
+            return ResponseEntity.ok().body("Agendamento deletado com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

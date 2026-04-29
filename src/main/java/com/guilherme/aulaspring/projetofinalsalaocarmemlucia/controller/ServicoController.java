@@ -61,6 +61,7 @@ public class ServicoController {
 
     @GetMapping
     public ResponseEntity<List<Servico>> listar() {
+
         return ResponseEntity.ok(service.listarTodos());
     }
 

@@ -63,21 +63,20 @@ public class AgendamentoService {
 
     @Transactional
     public void finalizarAtendimento(Long id) {
-
         Agendamento agendamento = agendamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Agendamento não encontrado para finalizar."));
-        agendamento.setStatus(Status.CONFIRMADO);
+
         if (Status.CONFIRMADO.equals(agendamento.getStatus())) {
             throw new RuntimeException("Este atendimento já foi finalizado anteriormente!");
         }
+        agendamento.setStatus(Status.CONFIRMADO);
         agendamentoRepository.save(agendamento);
 
         LancamentoFinanceiro entrada = new LancamentoFinanceiro();
         entrada.setDescricao("Serviço: " + agendamento.getServico().getNome() + " - Cliente: " + agendamento.getCliente().getNome());
-
         entrada.setValor(agendamento.getServico().getValor());
-
         entrada.setTipo(TipoDeLancamento.ENTRADA);
         entrada.setCategoria(CategoriaDeLancamento.SALAO);
+
         entrada.setData(java.time.LocalDateTime.now());
 
         lancamentoFinanceiroRepository.save(entrada);

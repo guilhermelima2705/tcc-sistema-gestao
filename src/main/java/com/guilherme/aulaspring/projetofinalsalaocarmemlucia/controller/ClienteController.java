@@ -65,6 +65,7 @@ public class ClienteController {
 
     @GetMapping
     public ResponseEntity<List<Cliente>> listar() {
+
         return ResponseEntity.ok(service.listarTodos());
     }
 

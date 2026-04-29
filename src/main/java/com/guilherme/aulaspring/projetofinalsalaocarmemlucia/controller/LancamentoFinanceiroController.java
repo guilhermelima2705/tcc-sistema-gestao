@@ -16,20 +16,24 @@ public class LancamentoFinanceiroController {
 
     private final LancamentoFinanceiroService service;
 
-    // LISTAR O EXTRATO COMPLETO
     @GetMapping
     public ResponseEntity<List<LancamentoFinanceiro>> listarTodos() {
+
         return ResponseEntity.ok(service.listarTodos());
     }
 
     @PostMapping("/manual")
     public ResponseEntity<?> salvarManual(@RequestBody LancamentoFinanceiro lancamento) {
         try {
-            lancamento.setData(java.time.LocalDateTime.now());
+            if (lancamento.getData() == null) {
+                lancamento.setData(java.time.LocalDateTime.now());
+            }
+            System.out.println("Valor recebido: " + lancamento.getValor());
+
             LancamentoFinanceiro salvo = service.salvar(lancamento);
             return ResponseEntity.ok(salvo);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao salvar: " + e.getMessage());
         }
     }
 

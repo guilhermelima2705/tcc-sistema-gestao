@@ -19,7 +19,7 @@ public class Cliente {
    private String nome;
     @Column(name="telefone", length = 15, nullable = false)
    private String telefone;
-    @Column(name="cpf", length = 10, nullable = true)
+    @Column(name="cpf", length = 14, nullable = true)
    private String cpf;
     @Column(name="data_nascimento", nullable = false)
     private LocalDate dataNascimento;
