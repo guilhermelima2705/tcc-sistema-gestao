@@ -1,11 +1,13 @@
 package com.guilherme.aulaspring.projetofinalsalaocarmemlucia.service;
 
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.Cliente;
+import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.Funcionario;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -63,5 +65,12 @@ public class ClienteService {
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
         return repository.findAll(Example.of(filtros, matcher));
+    }
+
+    @Transactional
+    public void alternarStatus(Long id) {
+        Cliente c = repository.findById(id).orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
+        c.setAtivo(!c.getAtivo());
+        repository.save(c);
     }
 }

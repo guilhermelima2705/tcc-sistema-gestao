@@ -27,9 +27,17 @@ public class AgendamentoService {
     public Agendamento salvar(AgendamentoDto dto) {
         var cliente = clienteRepository.findById(dto.clienteId()).orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
 
+        if (!cliente.getAtivo()) {
+            throw new RuntimeException("Agendamento negado: O cliente encontra-se inativo no sistema.");
+        }
+
         var servico = servicoRepository.findById(dto.servicoId()).orElseThrow(() -> new RuntimeException("Serviço não encontrado!"));
 
         var funcionario = funcionarioRepository.findById(dto.funcionarioId()).orElseThrow(() -> new RuntimeException("Funcionário não encontrado!"));
+
+        if (!funcionario.getAtivo()) {
+            throw new RuntimeException("Agendamento negado: O funcionário selecionado não está ativo.");
+        }
 
         if (cliente.getDataNascimento().isAfter(java.time.LocalDate.now().minusYears(16))) {
             throw new RuntimeException("Não é permitido agendamento para menores de 16 anos.");

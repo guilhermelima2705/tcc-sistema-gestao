@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,5 +60,12 @@ public class FuncionarioService {
 
     public Funcionario buscarPorId(Long id) {
         return repository.findById(id).orElseThrow(() -> new RuntimeException("Funcionário não encontrado!"));
+    }
+
+    @Transactional
+    public void alternarStatus(Long id) {
+        Funcionario f = repository.findById(id).orElseThrow(() -> new RuntimeException("Funcionário não encontrado!"));
+        f.setAtivo(!f.getAtivo());
+        repository.save(f);
     }
 }

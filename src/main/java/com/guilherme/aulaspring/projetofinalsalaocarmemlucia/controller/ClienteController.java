@@ -85,4 +85,13 @@ public class ClienteController {
         return ResponseEntity.ok(resultado);
     }
 
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> alternarStatus(@PathVariable Long id) {
+        try {
+            service.alternarStatus(id);
+            return ResponseEntity.ok("Status do cliente alterado com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
 }

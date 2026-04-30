@@ -62,6 +62,7 @@ public class FuncionarioController {
 
     @GetMapping
     public ResponseEntity<List<Funcionario>> listar() {
+
         return ResponseEntity.ok(service.listarTodos());
     }
 
@@ -77,5 +78,14 @@ public class FuncionarioController {
     @GetMapping("/busca")
     public ResponseEntity<List<Funcionario>> buscarPorNome(@RequestParam(value = "nome", required = false) String nome) {
         return ResponseEntity.ok(service.findByNome(nome));
+    }
+    @PatchMapping("/{id}/status")
+    public ResponseEntity<?> alternarStatus(@PathVariable Long id) {
+        try {
+            service.alternarStatus(id);
+            return ResponseEntity.ok("Status do funcionário alterado com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
