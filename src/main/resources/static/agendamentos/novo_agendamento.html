@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Espaço Carmem Lúcia | Novo Agendamento</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="/clientes/novo-cliente.css" />
+  <link rel="stylesheet" href="novo_agendamento.css" />
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="../img/logo.png" alt="Logo" class="sidebar-logo" />
+      <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
+      <li><a href="agendamentos.html" class="menu-ativo"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
+      <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
+      <li><a href="../funcionarios/funcionarios.html"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+      <li><a href="../servico/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+      <li><a href="../financas/financas.html"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
+    </ul>
+  </nav>
+
+  <main class="phone">
+
+        <header class="topbar">
+      <div class="topbar-logo">
+        <a href="../index-home/home.html"><img src="../img/logo.png" alt="Logo CL" /></a>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="avatar-wrap" id="avatarWrap">
+          <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
+          <div class="perfil-dropdown" id="perfilDropdown">
+            <div class="perfil-info">
+              <p class="perfil-nome" id="perfilNome"></p>
+              <p class="perfil-email" id="perfilEmail"></p>
+            </div>
+            <a href="../login/login.html" class="perfil-sair">
+              <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="tela-header">
+      <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h2 class="tela-titulo">Novo Agendamento</h2>
+    </div>
+
+    <section class="form-cadastro">
+
+      <form id="formAgendamento" name="novo_agendamento">
+
+
+        <div class="field" style="position: relative;">
+          <label for="pesquisa_cliente">Cliente</label>
+          <input type="text" id="pesquisa_cliente" placeholder="Digite o nome do cliente..." oninput="filtrarClientes()" autocomplete="off" required />
+
+          <input type="hidden" id="cliente_id" name="cliente_id" required />
+
+          <ul id="lista_sugestoes" style="display: none; position: absolute; width: 100%; background: white; border: 1px solid #ccc; border-radius: 4px; z-index: 100; list-style: none; padding: 0; margin-top: 2px; max-height: 180px; overflow-y: auto; box-shadow: 0 4px 8px rgba(0,0,0,0.1);"></ul>
+        </div>
+
+        <div class="linha-dupla">
+          <div class="field">
+            <label for="data_agendamento">Data</label>
+            <input type="date" id="data_agendamento" name="data_agendamento" required />
+          </div>
+          <div class="field">
+            <label for="hora_agendamento">Hora</label>
+            <input type="time" id="hora_agendamento" name="hora_agendamento" required />
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="servico_id">Serviço</label>
+          <select id="servico_id" name="servico_id" required>
+            <option value="">Selecione o Serviço</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="colaborador_id">Colaborador(a)</label>
+          <select id="colaborador_id" name="colaborador_id" required>
+            <option value="">Selecione o Profissional</option>
+          </select>
+        </div>
+
+        <div id="msgAgendamento" class="msg"></div>
+
+        <div class="form-btns">
+          <button type="reset" class="btn-form-limpar">
+            <i class="fa-solid fa-eraser"></i> Limpar
+          </button>
+          <button type="submit" class="btn-form-cadastrar">
+            <i class="fa-solid fa-calendar-check"></i> Agendar
+          </button>
+        </div>
+
+      </form>
+
+    </section>
+
+  </main>
+
+  <!-- Modal de sucesso — mesma estrutura do novo-cliente.html -->
+  <div class="modal-overlay" id="modalSucesso">
+    <div class="modal popup-sucesso">
+      <div class="popup-icone">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <p class="popup-titulo">Agendamento criado com sucesso!</p>
+      <div class="popup-btns">
+        <button class="btn-form-cadastrar"
+                onclick="window.location.href='../agendamentos/agendamentos.html'">
+          <i class="fa-solid fa-calendar-days"></i> Ver Agendamentos
+        </button>
+        <button class="btn-form-limpar" onclick="fecharModal()">
+          <i class="fa-solid fa-plus"></i> Novo Agendamento
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="novo_agendamento.js"></script>
+
+</body>
+</html>

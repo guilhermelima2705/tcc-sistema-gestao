@@ -1,0 +1,65 @@
+/* TELA NOVO CLIENTE  */
+/* Área do formulário de cadastro */
+.form-cadastro {
+  padding: 20px 20px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeUp 0.5s ease both;
+}
+
+/* Campo grande de texto (Observações) */
+.textarea-obs {
+  width: 100%;
+  min-height: 120px;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  border-radius: var(--radius-md);
+  padding: 12px 15px;
+  font-size: 0.97rem;
+  font-family: "Jost", sans-serif;
+  outline: none;
+  resize: vertical;
+  transition: 0.25s ease;
+}
+
+.textarea-obs::placeholder {
+  color: var(--text-soft);;
+}
+
+.textarea-obs:focus {
+  border-color: var(--rose-gold);
+  background: var(--white);
+  box-shadow: 0 0 0 4px rgba(212, 161, 152, 0.14);
+}
+
+/* POP-UP DE SUCESSO - Após cadastrar */
+.popup-icone {
+  text-align: center;
+  font-size: 2.8rem;
+  color: var(--rose-gold);
+  margin-bottom: 10px;
+  margin-top: 16px; 
+}
+
+.popup-titulo {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.popup-sucesso {
+  padding: 28px 24px 24px;
+  text-align: center;
+}
+
+.popup-btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

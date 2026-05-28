@@ -5,19 +5,25 @@ import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.repository.Funciona
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 public class FuncionarioService {
 
     private final FuncionarioRepository repository;
+    private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public Funcionario cadastrar(Funcionario funcionario){
-        //depois criar um validador para saber se realmente foi cadastrado
+        funcionario.setSenha(passwordEncoder.encode(funcionario.getSenha()));
         return repository.save(funcionario);
     }
 
@@ -68,4 +74,35 @@ public class FuncionarioService {
         f.setAtivo(!f.getAtivo());
         repository.save(f);
     }
-}
+
+    public void gerarTokenRecuperacao(String email) {
+        Funcionario funcionario = (Funcionario) repository.findByEmail(email);
+        if (funcionario == null) {
+            throw new RuntimeException("E-mail não encontrado!");
+        }
+
+        String token = UUID.randomUUID().toString(); // Gera um código aleatório e único
+        funcionario.setResetToken(token);
+        funcionario.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15)); // plusMInutes15 vai definir que esse codigo vai expirar em 15 minutos
+
+        repository.save(funcionario);
+
+        emailService.enviarEmail(email, "Recuperação de Senha",
+                "Seu código de recuperação é: " + token + "\n Ele expira em 15 minutos.");
+    }
+
+    @Transactional
+    public void redefinirSenha(String token, String novaSenha) {
+        Funcionario funcionario = repository.findByResetToken(token)
+                .orElseThrow(() -> new RuntimeException("Token inválido!"));
+        if (funcionario.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Este link de recuperação expirou!");
+        }
+        funcionario.setSenha(passwordEncoder.encode(novaSenha));
+        funcionario.setResetToken(null);
+        funcionario.setResetTokenExpiry(null);
+
+        repository.save(funcionario);
+    }
+    }
+

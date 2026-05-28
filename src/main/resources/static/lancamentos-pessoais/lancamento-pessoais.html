@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Espaço Carmem Lúcia | Lançamento Pessoal</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="lancamento-pessoais.css" />
+</head>
+<body>
+
+  <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="../img/logo.png" alt="Logo" class="sidebar-logo" />
+      <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
+      <li><a href="../agendamentos/agendamentos.html"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
+      <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
+      <li><a href="../funcionarios/funcionarios.html"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+      <li><a href="../servico/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+      <li><a href="../financas/financas.html" class="menu-ativo"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
+    </ul>
+  </nav>
+
+  <main class="phone">
+
+    <header class="topbar">
+      <div class="topbar-logo">
+        <a href="../index-home/home.html"><img src="../img/logo.png" alt="Logo CL" /></a>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="avatar-wrap" id="avatarWrap">
+          <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
+          <div class="perfil-dropdown" id="perfilDropdown">
+            <div class="perfil-info">
+              <p class="perfil-nome" id="perfilNome"></p>
+              <p class="perfil-email" id="perfilEmail"></p>
+            </div>
+            <a href="../login/login.html" class="perfil-sair">
+              <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="tela-header">
+      <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h2 class="tela-titulo">Lançamento Pessoal</h2>
+    </div>
+
+    <!-- LANÇAMENTO -->
+    <section class="lancamento-wrap">
+
+      <label class="lancamento-label" for="valor-input">Valor da transação</label>
+
+      <div class="valor-wrap">
+        <span class="valor-prefix">R$</span>
+        <input
+          type="number"
+          id="valor-input"
+          placeholder="0,00"
+          min="0"
+          step="0.01"
+        />
+      </div>
+
+      <div class="btns-lancamento">
+        <button class="btn-entrada" onclick="abrirPopup('entrada')">
+          <i class="fa-solid fa-arrow-up"></i> Entrada
+        </button>
+        <button class="btn-saida" onclick="abrirPopup('saida')">
+          <i class="fa-solid fa-arrow-down"></i> Saída
+        </button>
+      </div>
+
+    </section>
+
+    <!-- BOTÕES SECUNDÁRIOS -->
+    <div class="btns-secundarios">
+      <button class="btn-relatorio" onclick="irParaRelatorio()">
+        <i class="fa-solid fa-chart-line"></i> Relatório
+      </button>
+      <button class="btn-listar" onclick="irParaListar()">
+        <i class="fa-solid fa-list"></i> Listar
+      </button>
+    </div>
+
+  </main>
+
+  <!-- POPUP -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup-box">
+
+      <div class="popup-header">
+        <div class="popup-badge" id="popupBadge">
+          <i id="popupIcone" class="fa-solid fa-arrow-up"></i>
+        </div>
+        <p class="popup-titulo" id="popupTitulo">Confirmar entrada</p>
+      </div>
+
+      <p class="popup-valor-display" id="popupValorDisplay">R$ 0,00</p>
+
+      <label class="popup-label-nota" for="popup-notas">
+        Anotações <span class="popup-label-opcional">(opcional)</span>
+      </label>
+      <textarea
+        id="popup-notas"
+        class="popup-textarea"
+        placeholder="Descreva esta transação..."
+      ></textarea>
+
+      <div class="popup-acoes">
+        <button class="popup-btn-cancelar" onclick="fecharPopup()">Cancelar</button>
+        <button class="popup-btn-confirmar" id="popupBtnConfirmar" onclick="confirmar()">
+          Concluir
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast-cl" id="toast"></div>
+
+  <script src="lancamento-pessoais.js"></script>
+</body>
+</html>

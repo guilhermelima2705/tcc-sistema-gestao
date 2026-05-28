@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Espaço Carmem Lúcia | Finanças</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- BASE SEMPRE PRIMEIRO -->
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="financas.css" />
+</head>
+<body>
+
+  <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="../img/logo.png" alt="Logo" class="sidebar-logo" />
+      <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
+      <li><a href="../agendamentos/agendamentos.html"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
+      <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
+      <li><a href="../funcionarios/funcionarios.html"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+      <li><a href="../servico/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+      <li><a href="financas.html" class="menu-ativo"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
+    </ul>
+  </nav>
+
+  <main class="phone">
+
+    <header class="topbar">
+      <div class="topbar-logo">
+        <a href="../index-home/home.html">
+          <img src="../img/logo.png" alt="Logo CL" />
+        </a>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="avatar-wrap" id="avatarWrap">
+          <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
+          <div class="perfil-dropdown" id="perfilDropdown">
+            <div class="perfil-info">
+              <p class="perfil-nome" id="perfilNome"></p>
+              <p class="perfil-email" id="perfilEmail"></p>
+            </div>
+            <a href="../login/login.html" class="perfil-sair">
+              <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Cabeçalho da tela: seta de voltar + título.
+         Estilos vêm do base.css via .tela-header e .tela-titulo -->
+    <div class="tela-header">
+      <button class="btn-voltar" onclick="window.location.href='../index-home/home.html'" aria-label="Voltar">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h2 class="tela-titulo">Finanças</h2>
+    </div>
+
+    <!-- Cards de lucro -->
+    <section class="cards-grid">
+
+      <!-- Card 1: Meus Ganhos — mostra o que a proprietária gerou
+           com seus próprios atendimentos no dia -->
+      <div class="card-info">
+        <div class="card-info-header">
+          <i class="fa-solid fa-sun card-icon"></i>
+          <h2>Meus Ganhos</h2>
+          <button class="btn-olho" id="btnOlhoDia" onclick="toggleLucroDia()" aria-label="Mostrar ou ocultar meus ganhos">
+            <i class="fa-solid fa-eye-slash" id="iconOlhoDia"></i>
+          </button>
+        </div>
+        <ul class="card-lista" id="listaLucroDia"></ul>
+      </div>
+
+      <!-- Card 2: Lucro do Salão — total de entradas do negócio
+           incluindo todos os profissionais cadastrados -->
+      <div class="card-info">
+        <div class="card-info-header">
+          <i class="fa-solid fa-calendar card-icon"></i>
+          <h2>Lucro do Salão</h2>
+          <button class="btn-olho" id="btnOlhoMes" onclick="toggleLucroMes()" aria-label="Mostrar ou ocultar lucro do salão">
+            <i class="fa-solid fa-eye-slash" id="iconOlhoMes"></i>
+          </button>
+        </div>
+        <ul class="card-lista" id="listaLucroMes"></ul>
+      </div>
+
+    </section>
+
+    <!-- Botões de navegação — lado a lado em grid -->
+    <section class="financas-btns">
+
+      <button class="btn-financas" onclick="window.location.href='../lancamento-servicos/lancamento-servicos.html'">
+        <i class="fa-solid fa-scissors"></i>
+        <span>Serviços</span>
+      </button>
+
+      <button class="btn-financas" onclick="window.location.href='../lancamento-produtos/lancamento-produtos.html'">
+        <i class="fa-solid fa-box"></i>
+        <span>Produtos</span>
+      </button>
+
+      <button class="btn-financas" onclick="window.location.href='../lancamentos-pessoais/lancamento-pessoais.html'">
+        <i class="fa-solid fa-user"></i>
+        <span>Pessoal</span>
+      </button>
+
+    </section>
+
+  </main>
+
+  <script src="financas.js"></script>
+</body>
+</html>

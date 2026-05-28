@@ -1,0 +1,85 @@
+/* FUNCIONARIOS.CSS - Estilos específicos da tela de Funcionários.
+   Modal, field, form-btns, btn-acao, btn-excluir — no base.css!*/
+
+/* ÁREA DE AÇÕES: botão "Novo Funcionário" + campo de pesquisa */
+.clientes-acoes {
+  padding: 12px 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Agrupa os botões de ação lado a lado */
+.clientes-btns {
+  display: flex;
+  gap: 8px;
+}
+
+/* CAMPO DE PESQUISA */
+.clientes-pesquisa {
+  position: relative;
+  width: 260px;
+}
+
+/* Ícone de lupa posicionado dentro do campo de pesquisa */
+.pesquisa-icone {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+/* Estilo do input de pesquisa */
+.input-pesquisa {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  border-radius: var(--radius-md);
+  padding: 11px 14px 11px 36px;
+  font-size: 0.9rem;
+  font-family: "Jost", sans-serif;
+  outline: none;
+  transition: 0.25s ease;
+}
+
+.input-pesquisa::placeholder {
+  color: var(--text-soft);
+}
+
+/* Borda rose gold ao focar no campo de pesquisa */
+.input-pesquisa:focus {
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 0 4px rgba(212, 161, 152, 0.14);
+}
+
+/* RODAPÉ — botões Atualizar e Excluir abaixo da tabela */
+.clientes-rodape {
+  padding: 16px 20px 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* TABELA DE FUNCIONÁRIOS — alinhamento centralizado em todas as células.
+   Garante que CPF, Telefone e Nascimento fiquem no centro da coluna,
+   igual aos outros campos. text-align: center centraliza o conteúdo. */
+.clientes-tabela td,
+.clientes-tabela th {
+  text-align: center;
+  vertical-align: middle;
+  padding: 10px 8px;
+}
+
+.clientes-tabela .col-nome {
+  text-align: left;
+}
+
+.clientes-tabela .col-check {
+  text-align: center;
+  width: 36px;
+}

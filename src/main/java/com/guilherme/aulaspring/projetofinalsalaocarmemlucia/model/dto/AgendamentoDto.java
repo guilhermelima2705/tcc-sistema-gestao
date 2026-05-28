@@ -18,6 +18,8 @@ public record AgendamentoDto(
 
         @NotNull(message = "A data e hora são obrigatórias")
         @Future(message = "O agendamento deve ser para uma data futura")
-        LocalDateTime dataHora
+        LocalDateTime dataHora,
+
+        String linkWhatsapp
 ) {
 }

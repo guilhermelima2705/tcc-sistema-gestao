@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Mudar Senha | Espaço Carmem Lúcia</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <!-- BASE SEMPRE PRIMEIRO -->
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="login.css" />
+</head>
+<body>
+
+  <main class="phone">
+
+    <section class="banner">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="logo-wrap">
+        <img src="../img/logo.png" alt="Logo Carmem Lúcia" />
+        <span class="salon-name">
+          <small>Espaço</small>
+          Carmem Lúcia
+        </span>
+      </div>
+    </section>
+
+    <section class="card">
+
+      <div class="card-header">
+        <p class="eyebrow">Segurança</p>
+        <h1>Nova Senha</h1>
+        <p class="sub">Digite e confirme sua nova senha abaixo.</p>
+      </div>
+
+     <form id="formMudarSenha">
+      <!-- Campo Nova Senha -->
+      <div class="field">
+        <label for="novaSenha">Nova Senha</label>
+        <div class="pass-wrap">
+          <input type="password" id="novaSenha" placeholder="Digite a nova senha" />
+          <button class="toggle-pass" onclick="toggleSenha('novaSenha', 'olhoNova')" type="button">
+            <i class="fa-solid fa-eye-slash" id="olhoNova"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Campo Confirmar Senha -->
+      <div class="field">
+        <label for="confirmarSenha">Confirmar Senha</label>
+        <div class="pass-wrap">
+          <input type="password" id="confirmarSenha" placeholder="Confirme a nova senha" />
+          <button class="toggle-pass" onclick="toggleSenha('confirmarSenha', 'olhoConfirmar')" type="button">
+            <i class="fa-solid fa-eye-slash" id="olhoConfirmar"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mensagem de erro ou sucesso -->
+      <div id="msgMudarSenha" class="msg"></div>
+
+      <div class="form-btns">
+        <button class="btn-form-limpar" onclick="window.location.href='login.html'">
+          <i class="fa-solid fa-arrow-left"></i> Voltar
+        </button>
+        <button type="submit" class="btn-form-cadastrar">
+        <i class="fa-solid fa-lock"></i> Salvar
+        </button>
+      </div>
+     </form>
+    </section>
+
+  </main>
+
+  <!-- MODAL DE SUCESSO -->
+  <div class="modal-overlay" id="modalSucesso">
+    <div class="modal">
+      <div class="modal-body" style="text-align:center; padding: 32px 24px;">
+        <i class="fa-solid fa-circle-check" style="font-size:2.5rem; color:var(--rose-gold); display:block; margin-bottom:12px;"></i>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; margin-bottom:8px;">Senha Alterada!</h3>
+        <p style="font-size:0.85rem; color:var(--text-soft); margin-bottom:20px;">Sua senha foi atualizada com sucesso.</p>
+        <button class="btn-login" onclick="window.location.href='login.html'">
+          <i class="fa-solid fa-check"></i> Ir para o Login
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="mudar-senha.js"></script>
+</body>
+</html>

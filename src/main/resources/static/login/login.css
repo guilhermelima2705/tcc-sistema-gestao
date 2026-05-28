@@ -1,0 +1,105 @@
+/* LOGIN.CSS — estilos exclusivos da tela de login.
+   Banner, card, msg e cores já estão no base.css!
+   Aqui só fica o que é específico do login mesmo. */
+
+/* Campo de senha com botão de mostrar/ocultar */
+.pass-wrap {
+  position: relative;
+}
+.pass-wrap input {
+  padding-right: 48px;
+}
+.toggle-pass {
+  position: absolute;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--text-soft);
+  font-size: 1.05rem;
+  padding: 4px;
+}
+
+/* Link "Esqueci a senha" */
+.forgot {
+  display: block;
+  text-align: right;
+  margin: 2px 0 20px;
+  font-size: 0.84rem;
+  color: var(--rose-gold-dark);
+  text-decoration: none;
+}
+.forgot:hover {
+  text-decoration: underline;
+}
+
+/* Botão principal de login */
+.btn-login {
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  padding: 15px;
+  cursor: pointer;
+  font-family: "Jost", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--rose-gold), var(--rose-gold-dark));
+  box-shadow: 0 10px 24px rgba(212, 161, 152, 0.32);
+  transition: transform 0.15s, box-shadow 0.25s;
+}
+.btn-login:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 30px rgba(212, 161, 152, 0.4);
+}
+.btn-login:active {
+  transform: translateY(1px);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   CORREÇÃO DE LAYOUT — login, recuperar-senha, mudar-senha
+   Garante que o banner tenha altura suficiente no mobile e
+   que o card não quebre fora da tela em telas pequenas.
+   ═══════════════════════════════════════════════════════════ */
+
+/* No mobile, o banner precisa de mais espaço pra logo + curva */
+@media (max-width: 767px) {
+  .banner {
+    min-height: 220px;          /* altura mínima garantida */
+    padding-bottom: 60px;       /* espaço extra para a curva não comer o conteúdo */
+  }
+
+  /* Logo menor no mobile para não forçar o banner a crescer demais */
+  .logo-wrap img {
+    width: 110px;
+    height: 110px;
+  }
+
+  /* Card: margem negativa menor no mobile para não "esconder" atrás do banner */
+  .card {
+    margin-top: -24px;
+    margin-left: 14px;
+    margin-right: 14px;
+    padding: 22px 18px 20px;
+  }
+
+  /* Título um pouco menor para não quebrar linha no mobile */
+  .card h1 {
+    font-size: 1.7rem;
+  }
+}
+
+/* Pétalas (canvas) ficam atrás de tudo — não interferem com inputs */
+canvas {
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* Garante que o main .phone não crie scroll horizontal indesejado */
+.phone {
+  overflow-x: hidden;
+}

@@ -1,0 +1,247 @@
+/* AGENDAMENTO-CLIENTE.CSS */
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+main.phone {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+.card {
+  overflow-y: visible !important;
+  min-height: auto;
+  padding-bottom: 40px;
+}
+
+.form-btns { gap: 8px; margin-bottom: 0; }
+.form-btns button { padding: 12px 16px; font-size: 0.9rem; }
+
+.field { margin-bottom: 12px; }
+.field label { font-size: 0.85rem; margin-bottom: 6px; font-weight: 600; }
+
+.field input,
+.field textarea,
+.input-select {
+  padding: 12px 14px;
+  font-size: 0.95rem;
+}
+
+.field input::placeholder,
+.field textarea::placeholder { color: var(--text-soft); }
+
+.eyebrow {
+  color: #888888;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+}
+
+/* SELECT ESTILIZADO */
+.input-select {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  background: #fffdfa;
+  color: var(--text);
+  border-radius: var(--radius-md);
+  padding: 12px 36px 12px 14px;
+  font-size: 0.95rem;
+  font-family: "Jost", sans-serif;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: 0.25s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23b9857c' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  box-sizing: border-box;
+}
+
+.input-select:focus {
+  border-color: var(--rose-gold);
+  background-color: var(--white);
+  box-shadow: 0 0 0 4px rgba(212, 161, 152, 0.14);
+}
+
+/* ============================================================
+   BOTÃO ACESSIBILIDADE FIXO
+   - Fica no canto inferior direito (onde ficava o WhatsApp)
+   - Quando no topo da página sobe para não tapar o banner
+   - SVG tem tamanho fixo para nunca explodir
+============================================================ */
+.btn-acessibilidade-fixo {
+  position: fixed;
+  bottom: 12px;
+  right: 16px;
+  z-index: 99999;
+
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+
+  /* Transparente — a cor azul está dentro do SVG */
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
+  box-shadow: 0 6px 22px rgba(26, 111, 186, 0.45);
+  transition: bottom 0.45s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.2s,
+              transform 0.2s;
+}
+
+/* SVG ocupa exatamente o botão inteiro */
+.btn-acessibilidade-fixo svg {
+  width: 54px !important;
+  height: 54px !important;
+  display: block;
+  flex-shrink: 0;
+}
+
+.btn-acessibilidade-fixo:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(26, 111, 186, 0.55);
+}
+
+.btn-acessibilidade-fixo:active {
+  transform: translateY(1px);
+}
+
+/* Sobe quando o usuário está no topo (scroll < 80px) */
+.btn-acessibilidade-fixo.no-topo {
+  bottom: calc(100vh - 210px);
+}
+
+/* Destaque quando acessibilidade está ativa */
+body.acessibilidade-ativa .btn-acessibilidade-fixo {
+  box-shadow: 0 0 0 3px #fff,
+              0 0 0 6px #0055aa,
+              0 8px 22px rgba(0, 85, 170, 0.45);
+}
+
+/* ============================================================
+   BOTÃO WHATSAPP (dentro do modal)
+============================================================ */
+.btn-whats-modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: "Jost", sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, #25d366, #128c4a);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.35);
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
+}
+
+.btn-whats-modal:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(37, 211, 102, 0.45);
+}
+
+/* ============================================================
+   MODO ACESSIBILIDADE
+   Afeta APENAS o card/formulário — o banner não muda.
+============================================================ */
+
+/* Fundo geral e tamanho de fonte */
+body.acessibilidade-ativa {
+  font-size: 115%;
+}
+
+/* Banner NÃO muda — não colocar regras para .banner aqui */
+
+/* Card: fundo branco, mais contraste */
+body.acessibilidade-ativa .card {
+  background: #ffffff;
+  border: 2px solid #e0e0e0;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+  padding: 28px 24px;
+  filter: contrast(1.4) brightness(1.05);
+}
+
+/* Inputs e selects: borda azul, fonte maior */
+body.acessibilidade-ativa .field input,
+body.acessibilidade-ativa .field textarea,
+body.acessibilidade-ativa .input-select {
+  font-size: 1.1rem;
+  padding: 14px 16px;
+  border-width: 2.5px;
+  background: #ffffff;
+  border-color: #0066cc;
+  color: #000000;
+}
+
+/* Placeholder: mantém a cor clarinha igual ao campo Colaborador */
+body.acessibilidade-ativa .field input::placeholder,
+body.acessibilidade-ativa .field textarea::placeholder {
+  color: var(--text-soft);
+  opacity: 1;
+}
+
+/* Labels maiores e em preto */
+body.acessibilidade-ativa label {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #000000;
+}
+
+/* Títulos do card */
+body.acessibilidade-ativa .card h1,
+body.acessibilidade-ativa .card h2,
+body.acessibilidade-ativa .card h3 {
+  font-size: 1.15em;
+  color: #000000;
+  font-weight: 700;
+}
+
+/* Botão Agendar: azul acessível */
+body.acessibilidade-ativa .btn-form-cadastrar {
+  background: linear-gradient(135deg, #0066cc, #0055aa) !important;
+  color: white !important;
+}
+
+/* Botão Limpar */
+body.acessibilidade-ativa .btn-form-limpar {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0) !important;
+  color: #2c2c2c !important;
+  border: 1.5px solid #999 !important;
+}
+
+/* Mensagem de erro — alto contraste */
+body.acessibilidade-ativa .msg.erro {
+  background: #fffacd;
+  border: 2.5px solid #ff8c00;
+  color: #000;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 6px;
+}
+
+/* Destaque no botão de acessibilidade quando ativo */
+body.acessibilidade-ativa .btn-acessibilidade-fixo {
+  box-shadow: 0 0 0 3px #fff,
+              0 0 0 6px #0055aa,
+              0 8px 22px rgba(0, 85, 170, 0.45);
+}

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Espaço Carmem Lúcia | Serviços</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="servico.css" />
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="../img/logo.png" alt="Logo" class="sidebar-logo" />
+      <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
+      <li><a href="../agendamentos/agendamentos.html"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
+      <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
+      <li><a href="../funcionarios/funcionarios.html"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+      <li><a href="servico.html" class="menu-ativo"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+      <li><a href="../financas/financas.html"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
+    </ul>
+  </nav>
+
+  <main class="phone">
+
+        <header class="topbar">
+      <div class="topbar-logo">
+        <a href="../index-home/home.html"><img src="../img/logo.png" alt="Logo CL" /></a>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="avatar-wrap" id="avatarWrap">
+          <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
+          <div class="perfil-dropdown" id="perfilDropdown">
+            <div class="perfil-info">
+              <p class="perfil-nome" id="perfilNome"></p>
+              <p class="perfil-email" id="perfilEmail"></p>
+            </div>
+            <a href="../login/login.html" class="perfil-sair">
+              <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="tela-header">
+      <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
+        <i class="fa-solid fa-arrow-left"></i>
+      </button>
+      <h2 class="tela-titulo">Serviços</h2>
+    </div>
+
+    <!-- AÇÕES: NOVO SERVIÇO + PESQUISA -->
+    <section class="clientes-acoes">
+      <div class="clientes-btns">
+        <button class="btn-acao" onclick="window.location.href='cadastrar-servico.html'">
+          <i class="fa-solid fa-plus"></i> Novo Serviço
+        </button>
+      </div>
+      <div class="clientes-pesquisa">
+        <i class="fa-solid fa-magnifying-glass pesquisa-icone"></i>
+        <input type="text" id="campoPesquisa" class="input-pesquisa"
+          placeholder="Pesquisar serviço..." oninput="filtrarServicos()" />
+      </div>
+    </section>
+
+    <!-- TABELA DE SERVIÇOS -->
+    <section class="clientes-tabela-wrap">
+      <table class="clientes-tabela">
+        <thead>
+          <tr>
+            <th class="col-check">
+              <input type="checkbox" id="checkTodos" onchange="toggleTodos(this)" />
+            </th>
+            <th>Nome</th>
+            <th>Valor</th>
+            <th>Descrição</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaCorpo"></tbody>
+      </table>
+      <p class="tabela-vazia" id="tabelaVazia" style="display:none;">
+        Nenhum serviço encontrado.
+      </p>
+    </section>
+
+    <!-- BOTÕES RODAPÉ: ATUALIZAR, EXCLUIR -->
+    <div class="clientes-rodape">
+      <button class="btn-acao agend-escada-1" id="btnAtualizar"
+              onclick="abrirModalAtualizar()" disabled>
+        <i class="fa-solid fa-pen-to-square"></i> Atualizar
+      </button>
+      <button class="btn-excluir agend-escada-2" id="btnExcluir"
+              onclick="abrirModalExcluir()" disabled>
+        <i class="fa-solid fa-trash"></i> Excluir
+      </button>
+    </div>
+
+  </main>
+
+  <!-- MODAL: ATUALIZAR SERVIÇO -->
+  <div class="modal-overlay" id="modalAtualizar">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Atualizar Serviço</h3>
+        <button class="modal-fechar" onclick="fecharModal('modalAtualizar')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="formAtualizar" name="atualizar_servico">
+          <div class="field">
+            <label for="editNome">Nome do Serviço</label>
+            <input type="text" id="editNome" name="nome" />
+          </div>
+        <div class="field">
+           <label for="editValor">Valor (R$)</label>
+           <input type="text" id="editValor" name="preco" placeholder="0,00"
+            inputmode="numeric"
+            oninput="formatarPreco(this)" />
+           </div>
+          <div class="field">
+            <label for="editDescricao">Descrição</label>
+            <textarea id="editDescricao" name="descricao" style="min-height:100px;"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <div class="form-btns" style="width:100%">
+          <button type="button" class="btn-form-limpar" onclick="fecharModal('modalAtualizar')">
+            <i class="fa-solid fa-xmark"></i> Cancelar
+          </button>
+          <button type="button" class="btn-form-cadastrar" onclick="confirmarAtualizacao()">
+           <i class="fa-solid fa-check"></i> Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL - EXCLUIR SERVIÇO -->
+<div class="modal-overlay" id="modalExcluir">
+  <div class="modal">
+    <div class="modal-body" style="text-align:center; padding:32px 24px;">
+      <i class="fa-solid fa-triangle-exclamation"
+         style="font-size:2.2rem; color:#e07070; display:block; margin-bottom:12px;"></i>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; margin-bottom:8px;">
+        Excluir Serviço
+      </h3>
+      <p id="textoExcluir"
+         style="font-size:0.87rem; color:var(--text-soft); margin-bottom:24px;">
+        Tem certeza que deseja excluir este serviço?
+      </p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-form-limpar" style="flex:1;" onclick="fecharModal('modalExcluir')">
+          Cancelar
+        </button>
+        <button class="btn-excluir" style="flex:1; justify-content:center;" onclick="confirmarExclusao()">
+          <i class="fa-solid fa-trash"></i> Excluir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script src="servico.js"></script>
+
+</body>
+</html>

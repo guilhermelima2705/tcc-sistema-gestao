@@ -1,0 +1,238 @@
+.saudacao {
+  padding: 8px 20px 0px;     /* espaço interno: 8px em cima, 20px laterais, 0 embaixo */
+  animation: fadeUp 0.6s;    /* animação de entrada - sobe fade */
+  text-align: center;        /* centraliza o texto */
+}
+.saudacao h1 {
+  font-family: "Cormorant Garamond", serif;  /* fonte */
+  font-size: 2.4rem;                /* tamanho da letra */
+  font-weight: 300;                         
+  color: var(--text);             /* cor principal */
+  line-height: 1.0;              /* altura entre linhas */
+  margin-bottom: 4px;           /* espaço embaixo do título */
+}
+.saudacao h1 span {
+  font-family: 'Pinyon Script', cursive;  /* fonte cursiva */
+  font-style: normal;
+  color: var(--rose-gold-dark);        /* cor rosê */
+  font-size: 3rem;                   /* maior que o "Espaço" */
+}
+/* GRID - dois cards lado a lado COM ALTURA FIXA */
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  padding: 6px 20px 100px;
+  animation: fadeUp 0.6s 0.15s ease both;
+}
+/* Card base  */
+.card-info {
+  background: linear-gradient(160deg, #fff0ed, #fde0d8);
+  border-radius: var(--radius-lg);
+  padding: 18px 14px;
+  box-shadow: 0 4px 20px rgba(126, 93, 86, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 340px;
+  overflow-y: auto;
+}
+/* Cabeçalho do card */
+.card-info-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card-icon {
+  font-size: 1.2rem;
+  color: var(--rose-gold-dark);
+}
+.card-info-header h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+/* Data */
+.card-data {
+  font-size: 0.72rem;
+  color: var(--rose-gold-dark);
+  font-weight: 500;
+  text-transform: capitalize;
+}
+/* Texto vazio */
+.card-vazio {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  font-style: italic;
+  text-align: center;
+  padding: 10px 0;
+}
+/* Lista de agendamentos do dia */
+.card-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+.card-item {
+  display: flex;
+  align-items: flex-start; 
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.card-item-hora {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--rose-gold-dark);
+  min-width: 55px;
+}
+
+.card-item-texto {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.card-item-nome {
+  font-size: 0.85rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.card-item-servico {
+  font-size: 0.7rem;
+  color: var(--text-soft);
+}
+.card-item-vazio {
+  list-style: none;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  font-style: italic;
+  text-align: center;
+  padding: 16px 0;
+  margin: 0;
+}
+/* Lucro do dia - valor oculto com olhinho */
+.lucro-valor {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--rose-gold-dark);
+  letter-spacing: 0.04em;
+  margin: 8px 0;
+}
+#lucroDetalhe:empty {
+  display: none;
+}
+/* Botão olho - canto direito do cabeçalho do card */
+.btn-olho {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  margin-left: auto;
+  transition: color 0.2s;
+}
+.btn-olho:hover {
+  color: var(--rose-gold-dark);
+}
+/* Link do card - sempre no rodapé */
+.card-link {
+  font-size: 0.75rem;
+  color: var(--rose-gold-dark);
+  text-decoration: none;
+  font-weight: 500;
+  margin-top: auto;
+}
+.card-link:hover {
+  text-decoration: underline;
+}
+/* PC */
+@media (min-width: 768px) {
+  .cards-grid {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .saudacao {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
+/* PC */
+@media (min-width: 480px) {
+  .card-item-texto {
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+  }
+  .card-item-nome::after {
+    content: " | ";
+    color: var(--text-soft);
+    font-weight: 400;
+  }
+}
+/* Data e hora abaixo da saudação - centralizada */
+.data-hora-home {
+  font-family: "Jost", sans-serif;    /* fonte padrão */
+  font-size: 0.82rem;              /* tamanho pequeno */
+  color: var(--text-soft);        /* cor mais suave */
+  text-align: center;            /* centralizado */
+  margin: 2px 0 0;              /* margem em cima */
+  letter-spacing: 0.02em;      /* espaçamento entre letras */
+}
+
+/*  PC - fontes */
+@media (min-width: 768px) {
+  /* Título principal: "Espaço" e "Carmem Lúcia" */
+  .saudacao h1 {
+    font-size: 3rem;
+  }
+  .saudacao h1 span {
+    font-size: 3.8rem;
+  }
+  /* Saudação "Bom dia!" */
+  .saudacao .sub {
+    font-size: 1.1rem;
+  }
+  /* Data e hora */
+  .data-hora-home {
+    font-size: 0.95rem;
+  }
+  /* Cabeçalhos dos cards */
+  .card-info-header h2 {
+    font-size: 1.05rem;
+  }
+  /* Itens da lista (agendamentos e lucro) */
+  .card-item-nome {
+    font-size: 0.97rem;
+  }
+  .card-item-hora {
+    font-size: 0.82rem;
+  }
+  .card-item-servico {
+    font-size: 0.85rem;
+  }
+  /* Valor do lucro */
+  .lucro-valor {
+    font-size: 1.6rem;
+  }
+  /* Link "Ver todos" e "Ver detalhes" */
+  .card-link {
+    font-size: 0.88rem;
+  }
+  /* Cards mais altos para comportar o texto maior */
+  .card-info {
+    height: 380px;
+  }
+}

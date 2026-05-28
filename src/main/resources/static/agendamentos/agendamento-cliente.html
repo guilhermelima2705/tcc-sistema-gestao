@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Espaço Carmem Lúcia | Agendar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="agendamento-cliente.css" />
+</head>
+<body>
+
+  <main class="phone">
+
+    <!-- BANNER -->
+    <section class="banner">
+      <div class="circle c1"></div>
+      <div class="circle c2"></div>
+      <div class="logo-wrap">
+        <img src="../img/logo.png" alt="Logo Carmem Lúcia" />
+        <span class="salon-name">
+          <small>Espaço</small>
+          Carmem Lúcia
+        </span>
+      </div>
+    </section>
+
+    <!-- CARD -->
+    <section class="card">
+
+      <div class="card-header">
+        <p class="eyebrow">Área do Cliente</p>
+        <h1>Bem-vindo(a)</h1>
+      </div>
+
+      <form id="formAgendamento">
+
+        <div class="field">
+          <label for="nomeCliente">Nome</label>
+          <input type="text" id="nomeCliente" name="nomeCliente" placeholder="Digite seu nome completo" />
+        </div>
+
+        <div class="field">
+          <label for="telCliente">Tel / Whatsapp</label>
+          <input type="tel" id="telCliente" name="telCliente" maxlength="15" placeholder="Digite seu número" />
+        </div>
+
+        <div class="field">
+          <label for="dataAgend">Data</label>
+          <input type="date" id="dataAgend" name="dataAgend" />
+        </div>
+
+        <div class="field">
+          <label for="horaAgend">Hora</label>
+          <input type="time" id="horaAgend" name="horaAgend" />
+        </div>
+
+        <div class="field">
+          <label for="servicoAgend">Serviços</label>
+          <select id="servicoAgend" name="servicoAgend" class="input-select">
+            <option value="">Selecione o serviço...</option>
+            <option value="Corte">Corte</option>
+            <option value="Escova">Escova</option>
+            <option value="Manicure">Manicure</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="funcAgend">Colaborador</label>
+          <select id="funcAgend" name="funcAgend" class="input-select">
+            <option value="">Selecione o profissional...</option>
+            <option value="Carmem Lúcia">Carmem Lúcia</option>
+            <option value="Erika">Erika</option>
+          </select>
+        </div>
+
+        <div id="msgAgendamento" class="msg"></div>
+
+        <div class="form-btns">
+          <button type="button" class="btn-form-limpar" onclick="limparFormulario()">
+            <i class="fa-solid fa-eraser"></i> Limpar
+          </button>
+          <button type="submit" class="btn-form-cadastrar">
+            <i class="fa-solid fa-calendar-check"></i> Agendar
+          </button>
+        </div>
+
+      </form>
+
+    </section>
+
+  </main>
+
+  <!-- BOTÃO ACESSIBILIDADE FIXO — fora do <main> para position:fixed funcionar certo -->
+  <button class="btn-acessibilidade-fixo" id="btnAcess"
+          onclick="toggleAcessibilidade()"
+          aria-label="Acessibilidade"
+          title="Acessibilidade">
+<svg width="54" height="54" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#29B6F6"/>
+      <stop offset="100%" stop-color="#1565C0"/>
+    </linearGradient>
+  </defs>
+  <circle cx="128" cy="128" r="118" fill="url(#blueGradient)"/>
+  <circle cx="128" cy="128" r="104" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+  <circle cx="128" cy="62" r="12" fill="#FFFFFF"/>
+  <path d="M66 87 Q128 98 190 87" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M128 92 L128 154" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M128 154 L108 206" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+  <path d="M128 154 L148 206" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+</svg>
+  </button>
+
+  <!-- MODAL: confirmação + envio WhatsApp -->
+  <div class="modal-overlay" id="modalSucesso">
+    <div class="modal">
+      <div class="modal-body" style="text-align:center; padding:32px 24px;">
+        <i class="fa-solid fa-circle-check"
+           style="font-size:2.5rem; color:var(--rose-gold); display:block; margin-bottom:12px;"></i>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; margin-bottom:8px;">
+          Agendamento Pronto!
+        </h3>
+        <p style="font-size:0.85rem; color:var(--text-soft); margin-bottom:20px;">
+          Toque em <strong>Enviar pelo WhatsApp</strong> para confirmar seu horário com o Espaço Carmem Lúcia.
+        </p>
+        <button type="button" class="btn-whats-modal" onclick="enviarWhatsApp()">
+          <i class="fa-brands fa-whatsapp" style="font-size:1.2rem;"></i>
+          Enviar pelo WhatsApp
+        </button>
+        <button type="button" class="btn-form-limpar"
+                style="margin-top:10px;width:100%;display:flex;justify-content:center;"
+                onclick="fecharModal()">
+          Fechar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="agendamento-cliente.js"></script>
+</body>
+</html>

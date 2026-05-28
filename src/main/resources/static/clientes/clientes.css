@@ -1,0 +1,103 @@
+/* ÁREA DE AÇÕES: botões em cima, pesquisa embaixo */
+.clientes-acoes {
+  padding: 12px 20px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.clientes-btns {
+  display: flex;
+  gap: 8px;
+}
+
+/* PESQUISA */
+.clientes-pesquisa {
+  position: relative;
+  width: 260px;
+}
+
+.pesquisa-icone {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.input-pesquisa {
+  width: 100%;
+  border: 1.5px solid var(--border);
+  background: var(--white);
+  color: var(--text);
+  border-radius: var(--radius-md);
+  padding: 11px 14px 11px 36px;
+  font-size: 0.9rem;
+  font-family: "Jost", sans-serif;
+  outline: none;
+  transition: 0.25s ease;
+}
+
+.input-pesquisa::placeholder {
+  color: var(--text-soft);
+}
+
+.input-pesquisa:focus {
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 0 4px rgba(212, 161, 152, 0.14);
+}
+
+/* RODAPÉ CLIENTES */
+.clientes-rodape {
+  padding: 16px 20px 90px;
+}
+/* RODAPÉ — botões em escadinha igual aos agendamentos */
+.clientes-rodape {
+  padding: 16px 20px 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Bolinha de status antes do nome */
+.status-bolinha {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Verde = ativo */
+.status-bolinha.ativo {
+  background: #7bbf8a;
+}
+
+/* Cinza = inativo */
+.status-bolinha.inativo {
+  background: #c5b8b4;
+}
+
+/* Linha inteira mais apagada para clientes inativos */
+.cliente-inativo td {
+  opacity: 0.45;
+}
+
+/* OBSERVAÇÃO — aparece completa no PC, quebra normalmente no celular */
+.col-obs {
+  white-space: normal;
+  word-break: break-word;
+  max-width: 200px;
+}
+
+/* No celular a coluna de observação fica embaixo das outras */
+@media (max-width: 480px) {
+  .col-obs {
+    max-width: 120px;
+  }
+}

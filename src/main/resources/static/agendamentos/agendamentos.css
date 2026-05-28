@@ -1,0 +1,148 @@
+/* Tabela - fonte menor para caber no celular */
+.agend-tabela th,
+.agend-tabela td {
+  font-size: 0.85rem;     
+  padding: 12px 8px;       
+  text-align: left;       
+  vertical-align: middle;
+}
+
+/* Rodapé com os botões em escadinha */
+.agend-rodape {
+  padding: 20px 20px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-start;
+}
+
+/* Larguras decrescentes criam o efeito escadinha */
+.agend-escada-1 {
+  min-width: 210px;
+}
+
+.agend-escada-2 {
+  min-width: 150px;
+}
+
+.agend-escada-3 {
+  min-width: 112px;
+}
+
+/* Wrapper precisa de position para o submenu se posicionar */
+.agend-novo-wrap {
+  position: relative;
+  width: 100%;
+}
+
+/* Chevron dentro do botão Novo Agendamento */
+.agend-chevron {
+  font-size: 0.72rem;
+  margin-left: 6px;
+  transition: transform 0.2s;
+}
+
+.agend-chevron.girado {
+  transform: rotate(180deg);
+}
+
+/* Submenu - ajustado para não esticar no PC */
+.agend-submenu {
+  display: none;
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  width: 100%;
+  max-width: 260px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  z-index: 20;
+  animation: fadeUp 0.2s ease both;
+}
+
+.agend-submenu.aberto {
+  display: block;
+}
+
+.agend-submenu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.15s;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+}
+
+.agend-submenu-item:last-child {
+  border-bottom: none;
+}
+
+.agend-submenu-item i {
+  color: var(--rose-gold-dark);
+  width: 16px;
+  text-align: center;
+}
+
+.agend-submenu-item:hover {
+  background: var(--cream);
+  color: var(--rose-gold-dark);
+}
+/* Faz o sobrenome pular para baixo se não couber no celular */
+.col-nome-alinhado {
+  text-align: left !important; 
+  white-space: normal !important; 
+  vertical-align: middle;
+  line-height: 1.2;
+  max-width: 90px;  
+  word-wrap: break-word;
+}
+/* Mantém o número de telefone reto na linha sem quebrar */
+.col-tel-fixo {
+  white-space: nowrap;
+}
+/* Faz o ano ficar embaixo do dia/mês */
+.col-data-empilhada {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; 
+  line-height: 1.1;
+  font-weight: 500;
+}
+/* Estilo do ano embaixo */
+.ano-abaixo {
+  font-size: 0.68rem;
+  opacity: 0.7;
+  font-weight: 400;
+}
+/* No computador a barra aparece normal */
+.barra-pc {
+  display: inline;
+}
+.quebra-ano {
+  margin-left: 0; /* No PC o ano fica colado na barra */
+}
+
+/* SÓ NO CELULAR */
+@media (max-width: 480px) {
+  .celula-data {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* A barra some para o ano ficar sozinho embaixo */
+  .barra-pc {
+    display: none;
+  }
+  .quebra-ano {
+    font-size: inherit;
+    line-height: 1;
+  }
+}

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Espaço Carmem Lúcia | Agendamentos</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../base.css" />
+  <link rel="stylesheet" href="agendamentos.css" />
+</head>
+<body>
+
+  <!-- overlay do menu lateral -->
+    <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="../img/logo.png" alt="Logo" class="sidebar-logo" />
+      <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+    </div>
+    <ul class="sidebar-menu">
+      <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
+      <li><a href="agendamentos.html" class="menu-ativo"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
+      <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
+      <li><a href="../funcionarios/funcionarios.html"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+      <li><a href="../servico/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+      <li><a href="../financas/financas.html"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
+    </ul>
+  </nav>
+
+  <main class="phone">
+
+    <!-- topbar -->
+        <header class="topbar">
+      <div class="topbar-logo">
+        <a href="../index-home/home.html"><img src="../img/logo.png" alt="Logo CL" /></a>
+      </div>
+      <div class="topbar-right">
+        <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
+          <span></span><span></span><span></span>
+        </button>
+        <div class="avatar-wrap" id="avatarWrap">
+          <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
+          <div class="perfil-dropdown" id="perfilDropdown">
+            <div class="perfil-info">
+              <p class="perfil-nome" id="perfilNome"></p>
+              <p class="perfil-email" id="perfilEmail"></p>
+            </div>
+            <a href="../login/login.html" class="perfil-sair">
+              <i class="fa-solid fa-right-from-bracket"></i> Sair
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- cabeçalho com botão voltar - idêntico às outras telas -->
+    <div class="tela-header">
+      <button class="btn-voltar" onclick="window.location.href='../index-home/home.html'" aria-label="Voltar">
+    <i class="fa-solid fa-arrow-left"></i>
+    </button>
+      <h2 class="tela-titulo">Agendamentos</h2>
+    </div>
+
+    <!-- tabela: checkbox | nome | tel | data | hora | serviço -->
+    <section class="clientes-tabela-wrap">
+      <table class="clientes-tabela agend-tabela">
+        <thead>
+        <tr>
+          <th class="col-check">
+            <input type="checkbox" id="checkTodos" onchange="toggleTodos(this)" />
+          </th>
+          <th>Nome</th>
+          <th class="text-center">Telefone</th>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Serviço</th>
+          <th class="text-center">WhatsApp</th> </tr>
+        </thead>
+        <tbody id="tabelaCorpo"></tbody>
+      </table>
+      <p class="tabela-vazia" id="tabelaVazia" style="display:none;">
+        Nenhum agendamento encontrado.
+      </p>
+    </section>
+
+    <!-- botões em escadinha — usando classes padrão do sistema -->
+      <div class="agend-rodape">
+
+          <div class="agend-novo-wrap">
+              <button class="btn-acao agend-escada-1" onclick="toggleSubmenu(event)">
+                  <i class="fa-solid fa-calendar-plus"></i>
+                  Novo Agendamento
+                  <i class="fa-solid fa-chevron-up agend-chevron" id="agendChevron"></i>
+              </button>
+              <div class="agend-submenu" id="agendSubmenu">
+                  <a href="../clientes/clientes.html" class="agend-submenu-item">
+                      <i class="fa-solid fa-users"></i> Listar Clientes
+                  </a>
+                  <a href="../clientes/novo-cliente.html" class="agend-submenu-item">
+                      <i class="fa-solid fa-user-plus"></i> Cadastrar Cliente
+                  </a>
+                  <a href="novo_agendamento.html" class="agend-submenu-item" onclick="fecharSubmenu()">
+                      <i class="fa-solid fa-calendar-plus"></i> Novo Agendamento
+                  </a>
+              </div>
+          </div>
+
+          <button class="btn-acao agend-escada-1" id="btnFinalizar" onclick="finalizarAtendimentoSelecionado()" style="background-color: #2ec4b6; color: white;" disabled>
+              <i class="fa-solid fa-circle-check"></i> Finalizar Atendimento
+          </button>
+
+          <button class="btn-acao btn-acao-secundario agend-escada-2"
+                  id="btnAtualizar" onclick="abrirModalAtualizar()" disabled>
+              <i class="fa-solid fa-pen-to-square"></i> Atualizar
+          </button>
+
+          <button class="btn-excluir agend-escada-3"
+                  id="btnExcluir" onclick="excluirSelecionados()" disabled>
+              <i class="fa-solid fa-trash"></i> Excluir
+          </button>
+      </div>
+    <!-- botão WhatsApp flutuante -->
+    <button class="btn-whats" title="Implementação futura — envio automático de mensagens">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+      </svg>
+    </button>
+
+  </main>
+
+  <!-- modal atualizar agendamento -->
+  <div class="modal-overlay" id="modalAtualizar">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Atualizar Agendamento</h3>
+        <button class="modal-fechar" onclick="fecharModal()" aria-label="Fechar">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!--Adicionei <form id="formAtualizar"> -->
+        <form id="formAtualizar">
+          <div class="field">
+            <label for="editNome">Nome</label>
+            <input type="text" id="editNome" name="editNome" />
+          </div>
+          <div class="field">
+            <label for="editTel">Telefone</label>
+            <input type="tel" id="editTel" name="editTel" />
+          </div>
+          <div class="field">
+            <label for="editData">Data</label>
+            <input type="date" id="editData" name="editData" />
+          </div>
+          <div class="field">
+            <label for="editHora">Hora</label>
+            <input type="time" id="editHora" name="editHora" />
+          </div>
+          <div class="field">
+            <label for="editServico">Serviço</label>
+            <input type="text" id="editServico" name="editServico" />
+          </div>
+          <div id="msgAtualizar" class="msg"></div>
+        </form>
+        <!-- </form> -->
+      </div>
+      <div class="modal-footer">
+        <div class="form-btns" style="width:100%">
+          <button type="button" class="btn-form-limpar" onclick="fecharModal()">
+            <i class="fa-solid fa-xmark"></i> Cancelar
+          </button>
+
+          <button type="submit" class="btn-form-cadastrar" form="formAtualizar">
+            <i class="fa-solid fa-check"></i> Salvar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="agendamentos.js"></script>
+  <!-- MODAL CONFIRMAÇÃO EXCLUSÃO — substitui o confirm() feio do navegador -->
+  <div class="modal-overlay" id="modalConfirmarExclusao">
+    <div class="modal">
+      <div class="modal-body" style="text-align:center; padding:32px 24px;">
+        <i class="fa-solid fa-triangle-exclamation"
+           style="font-size:2.2rem; color:#e07070; display:block; margin-bottom:12px;"></i>
+        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; margin-bottom:8px;">
+          Confirmar exclusão
+        </h3>
+        <p id="textoConfirmacaoExclusao"
+           style="font-size:0.87rem; color:var(--text-soft); margin-bottom:24px;">
+          Tem certeza que deseja excluir este agendamento?
+        </p>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-form-limpar" style="flex:1;"
+                  onclick="fecharModalConfirmacao()">
+            Cancelar
+          </button>
+          <button class="btn-excluir" style="flex:1; justify-content:center;"
+                  onclick="executarExclusao()">
+            <i class="fa-solid fa-trash"></i> Excluir
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

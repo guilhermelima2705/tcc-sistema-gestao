@@ -1,0 +1,209 @@
+.cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 20px 16px 20px;
+  animation: fadeUp 0.6s 0.15s ease both;
+}
+
+/* Card base */
+.card-info {
+  background: linear-gradient(160deg, #fff0ed, #fde0d8);
+  border-radius: var(--radius-lg);
+  padding: 16px 14px;
+  box-shadow: 0 4px 20px rgba(126, 93, 86, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 260px;
+  height: auto;
+  overflow-y: auto;
+}
+
+/* Cabeçalho do card */
+.card-info-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.card-icon {
+  font-size: 1rem;
+  color: var(--rose-gold-dark);
+}
+.card-info-header h2 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+/* Botão olho */
+.btn-olho {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+  padding: 2px 4px;
+  margin-left: auto;
+  transition: color 0.2s;
+}
+.btn-olho:hover { color: var(--rose-gold-dark); }
+
+/* Lista dentro do card */
+.card-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+}
+.card-item {
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+.card-item:last-child { border-bottom: none; }
+.card-item-hora {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--rose-gold-dark);
+  flex-shrink: 0;
+}
+.card-item-texto {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.card-item-nome {
+  font-size: 0.78rem;
+  color: var(--text);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.card-item-servico {
+  font-size: 0.7rem;
+  color: var(--text-soft);
+}
+
+/* BOTÕES DE NAVEGAÇÃO (Serviços / Produtos / Pessoal)  */
+.financas-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 4px 16px 40px;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+
+.btn-financas:last-child {
+  grid-column: 1 / -1;
+  max-width: calc(50% - 6px);
+  justify-self: center;
+}
+
+.btn-financas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-family: "Jost", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--rose-gold), var(--rose-gold-dark));
+  box-shadow: 0 6px 16px rgba(212, 161, 152, 0.3);
+  transition: transform 0.15s, box-shadow 0.2s;
+  white-space: nowrap;
+}
+.btn-financas i {
+  font-size: 0.9rem;
+}
+.btn-financas:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(212, 161, 152, 0.4);
+}
+.btn-financas:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 10px rgba(212, 161, 152, 0.2);
+}
+
+/*  PC: 3 botões lado a lado */
+@media (min-width: 768px) {
+  .card-item-nome {
+    font-size: 0.92rem;
+  }
+  .card-item-hora {
+    font-size: 0.82rem;
+  }
+  .card-item-servico {
+    font-size: 0.8rem;
+  }
+  .card-info-header h2 {
+    font-size: 1.2rem;
+  }
+  /* Cards mais altos no PC */
+  .card-info {
+    min-height: 320px;
+  }
+  .cards-grid {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  .financas-btns {
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .btn-financas:last-child {
+    grid-column: auto;
+    max-width: none;
+    justify-self: stretch;
+    font-size: 1rem !important;
+    padding: 14px 8px !important;
+  }
+  
+  .card-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  
+  .card-item-texto {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+  
+  .card-item-servico {
+    background: rgba(212, 161, 152, 0.15);
+    padding: 2px 8px;
+    border-radius: 15px;
+  }
+}
+
+/* para Lucro do Salão não quebrar no celular */
+@media (max-width: 480px) {
+  .card-info-header h2 {
+    white-space: nowrap;
+    font-size: 0.95rem;
+  }
+  .card-info-header {
+    gap: 4px;
+  }
+}

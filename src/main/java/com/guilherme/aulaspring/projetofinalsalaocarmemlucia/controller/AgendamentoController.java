@@ -49,8 +49,8 @@ public class AgendamentoController {
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarPorId(@PathVariable Long id) {
         try {
-            Agendamento agendamento = service.buscarPorId(id);
-            return ResponseEntity.ok(agendamento);
+            AgendamentoDto agendamentoDto = service.buscarAgendamentoComLink(id);
+            return ResponseEntity.ok(agendamentoDto);
         } catch (RuntimeException e) {
             return ResponseEntity.status(404).body(e.getMessage());
         }

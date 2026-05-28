@@ -8,9 +8,13 @@ import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.enums.Status;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.enums.TipoDeLancamento;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.repository.*;
 import lombok.RequiredArgsConstructor;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 //A camada service é a camada onde vamos colocar todas as validações e todos os metodos que o sistema vai trabalhar
@@ -18,11 +22,11 @@ import java.util.List;
 @RequiredArgsConstructor    //Cria um construtor
 public class AgendamentoService {
 
-   private final AgendamentoRepository agendamentoRepository;
-   private final ClienteRepository clienteRepository;
-   private final ServicoRepository servicoRepository;
-   private final FuncionarioRepository funcionarioRepository;
-   private final LancamentoFinanceiroRepository lancamentoFinanceiroRepository;
+    private final AgendamentoRepository agendamentoRepository;
+    private final ClienteRepository clienteRepository;
+    private final ServicoRepository servicoRepository;
+    private final FuncionarioRepository funcionarioRepository;
+    private final LancamentoFinanceiroRepository lancamentoFinanceiroRepository;
 
     public Agendamento salvar(AgendamentoDto dto) {
         var cliente = clienteRepository.findById(dto.clienteId()).orElseThrow(() -> new RuntimeException("Cliente não encontrado!"));
@@ -54,7 +58,8 @@ public class AgendamentoService {
     }
 
     public List<Agendamento> listarTodos() {
-        return agendamentoRepository.findAll();}
+        return agendamentoRepository.findAll();
+    }
 
     public Agendamento buscarPorId(Long id) {
         return agendamentoRepository.findById(id).orElseThrow(() -> new RuntimeException("Agendamento não encontrado com o ID: " + id));
@@ -89,4 +94,44 @@ public class AgendamentoService {
 
         lancamentoFinanceiroRepository.save(entrada);
     }
+
+    private String gerarLinkWhatsApp(String telefone, String nomeCliente, String data, String hora) {
+        String telefoneLimpo = telefone.replaceAll("[^0-9]", "");
+        String mensagem = "Olá, " + nomeCliente + "! Lembrete de agendamento no Salão Carmem Lúcia: " +
+                data + " às " + hora + ". Te esperamos!";
+
+        String mensagemCodificada = URLEncoder.encode(mensagem, StandardCharsets.UTF_8);
+        return "https://wa.me/" + telefoneLimpo + "?text=" + mensagemCodificada;
+    }
+
+    public AgendamentoDto buscarAgendamentoComLink(Long id) {
+        Agendamento agendamento = agendamentoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Agendamento não encontrado"));
+
+        String link = null; // Começa como nulo
+
+        LocalDate hoje = LocalDate.now();
+        LocalDate dataAgendamento = agendamento.getDataHora().toLocalDate();
+
+        if (hoje.plusDays(1).equals(dataAgendamento)) {
+            DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
+
+            link = gerarLinkWhatsApp(
+                    agendamento.getCliente().getTelefone(),
+                    agendamento.getCliente().getNome(),
+                    agendamento.getDataHora().format(formatoData),
+                    agendamento.getDataHora().format(formatoHora)
+            );
+        }
+
+        return new AgendamentoDto(
+                agendamento.getCliente().getId(),
+                agendamento.getFuncionario().getId(),
+                agendamento.getServico().getId(),
+                agendamento.getDataHora(),
+                link
+        );
+    }
 }
+
