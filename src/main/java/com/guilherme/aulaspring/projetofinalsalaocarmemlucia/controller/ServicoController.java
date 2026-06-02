@@ -42,6 +42,7 @@ public class ServicoController {
             servicoOptional.setNome(dto.nome());
             servicoOptional.setValor(dto.valor());
             servicoOptional.setDuracaoMinutos(dto.duracaoMinutos());
+            servicoOptional.setDescricao(dto.descricao());
 
             service.atualizar(servicoOptional);
             return ResponseEntity.noContent().build();

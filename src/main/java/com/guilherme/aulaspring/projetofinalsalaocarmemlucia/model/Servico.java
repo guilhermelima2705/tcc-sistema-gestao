@@ -20,15 +20,17 @@ public class Servico {
     private BigDecimal valor;
     @Column(name="temposervico")
     private Integer duracaoMinutos;
+    @Column(name="descricao", length = 255)
+    private String descricao;
 
     public Servico() {
     }
 
-    public Servico(Long id, String nome, BigDecimal valor, Integer duracaoMinutos) {
+    public Servico(Long id, String nome, BigDecimal valor, Integer duracaoMinutos, String descricao) {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
         this.duracaoMinutos = duracaoMinutos;
+        this.descricao = descricao;
     }
-
 }

@@ -9,13 +9,15 @@ import java.math.BigDecimal;
 public record ServicoDto(
         @NotBlank String nome,
         @NotNull BigDecimal valor,
-        @NotNull Integer duracaoMinutos
+        @NotNull Integer duracaoMinutos,
+        String descricao
 ) {
     public Servico mapearParaServico() {
         Servico s = new Servico();
         s.setNome(this.nome);
         s.setValor(this.valor);
         s.setDuracaoMinutos(this.duracaoMinutos);
+        s.setDescricao(this.descricao);
         return s;
     }
 }

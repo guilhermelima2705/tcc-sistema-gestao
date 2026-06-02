@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Espaço Carmem Lúcia | Relatório</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="../../base.css" />
+  <link rel="stylesheet" href="../relatorio-servicos/relatorio-servicos.css" />
+</head>
+<body>
+
+<div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="../../img/logo.png" alt="Logo" class="sidebar-logo" />
+    <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="../../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
+    <li><a href="../../agendamentos/agendamentos.html"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
+    <li><a href="../../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
+    <li><a href="../../funcionarios/funcionarios.html"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+    <li><a href="../../servicos/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+    <li><a href="../financas.html" class="menu-ativo"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
+  </ul>
+</nav>
+
+<main class="phone">
+
+  <header class="topbar">
+    <div class="topbar-logo">
+      <a href="../../index-home/home.html"><img src="../../img/logo.png" alt="Logo CL" /></a>
+    </div>
+    <div class="topbar-right">
+      <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="avatar-wrap" id="avatarWrap">
+        <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
+        <div class="perfil-dropdown" id="perfilDropdown">
+          <div class="perfil-info">
+            <p class="perfil-nome" id="perfilNome"></p>
+            <p class="perfil-email" id="perfilEmail"></p>
+          </div>
+          <a href="../../login/login.html" class="perfil-sair">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="tela-header">
+    <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <h2 class="tela-titulo">Relatório Pessoal</h2>
+  </div>
+
+  <!-- Cards de totais -->
+  <section class="rel-resumo">
+    <div class="rel-card rel-card-entrada">
+      <div class="rel-card-label">
+        <i class="fa-solid fa-arrow-up"></i> Entradas
+      </div>
+      <div class="rel-card-valor" id="totalEntradas">R$ 0,00</div>
+    </div>
+    <div class="rel-card rel-card-saida">
+      <div class="rel-card-label">
+        <i class="fa-solid fa-arrow-down"></i> Saídas
+      </div>
+      <div class="rel-card-valor" id="totalSaidas">R$ 0,00</div>
+    </div>
+  </section>
+
+  <!-- Saldo líquido -->
+  <div class="rel-saldo">
+    <span class="rel-saldo-label">Saldo do período</span>
+    <span class="rel-saldo-valor" id="saldoLiquido">R$ 0,00</span>
+  </div>
+
+  <!-- BOTÃO EXPORTAR PDF -->
+  <div class="btn-exportar-wrap">
+    <button class="btn-exportar" onclick="exportarPDF()">
+      <i class="fa-solid fa-file-arrow-down"></i> Exportar Extrato PDF
+    </button>
+  </div>
+
+  <!-- Filtros (apenas mês/ano) -->
+  <section class="rel-acoes">
+    <div class="filtro-periodo">
+      <select id="selectMes" class="select-periodo" onchange="mudouMes()">
+        <option value="">Mês</option>
+        <option value="01">Janeiro</option>
+        <option value="02">Fevereiro</option>
+        <option value="03">Março</option>
+        <option value="04">Abril</option>
+        <option value="05">Maio</option>
+        <option value="06">Junho</option>
+        <option value="07">Julho</option>
+        <option value="08">Agosto</option>
+        <option value="09">Setembro</option>
+        <option value="10">Outubro</option>
+        <option value="11">Novembro</option>
+        <option value="12">Dezembro</option>
+      </select>
+
+      <select id="selectAno" class="select-periodo" style="display: none;" onchange="aplicarFiltros()">
+        <option value="">Ano</option>
+      </select>
+    </div>
+
+    <div class="rel-filtros">
+      <button class="rel-filtro-btn ativo" onclick="setFiltro('todos', this)">Todos</button>
+      <button class="rel-filtro-btn" onclick="setFiltro('entrada', this)">Entradas</button>
+      <button class="rel-filtro-btn" onclick="setFiltro('saida', this)">Saídas</button>
+    </div>
+  </section>
+
+  <!-- Lista de transações -->
+  <section class="rel-lista" id="listaTransacoes"></section>
+
+  <p class="tabela-vazia" id="listaVazia" style="display:none;">
+    Nenhuma transação encontrada.
+  </p>
+
+  <div class="rel-rodape">
+    <button class="btn-excluir" id="btnExcluir" onclick="excluirSelecionados()" disabled>
+      <i class="fa-solid fa-trash"></i> Excluir
+    </button>
+  </div>
+
+</main>
+
+<!-- Modal: Confirmar Exclusão -->
+<div class="modal-overlay" id="modalConfirmarExcluir">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Confirmar Exclusão</h3>
+      <button class="modal-fechar" onclick="fecharModal('modalConfirmarExcluir')">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body" style="text-align:center; padding:20px;">
+      <div style="font-size:2.4rem; color:#b85c5c; margin-bottom:12px;">
+        <i class="fa-solid fa-trash"></i>
+      </div>
+      <p id="modalExcluirTexto"
+         style="font-family:'Jost',sans-serif; font-size:0.95rem; color:var(--text); line-height:1.6; margin:0;">
+        Deseja realmente excluir? Esta ação não pode ser desfeita.
+      </p>
+    </div>
+    <div class="modal-footer">
+      <div class="form-btns" style="width:100%;">
+        <button type="button" class="btn-form-limpar" onclick="fecharModal('modalConfirmarExcluir')">
+          <i class="fa-solid fa-xmark"></i> Cancelar
+        </button>
+        <button type="button" class="btn-excluir" onclick="executarExclusaoConfirmada()" style="flex:1;">
+          <i class="fa-solid fa-trash"></i> Excluir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="relatorio-pessoal.js"></script>
+</body>
+</html>

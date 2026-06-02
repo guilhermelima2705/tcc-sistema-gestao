@@ -3,6 +3,14 @@
 // controle de permissões por perfil e menu lateral.
 
 // MENU LATERAL - Abre o menu deslizante ao clicar no hambúrguer
+// HOME.JS - Tela inicial integrada com o banco de dados via Spring Boot
+
+// VARIÁVEIS GLOBAIS PARA ARMAZENAR OS DADOS REAIS DA API
+let agendamentosDados = [];
+let lancamentosFinanceirosHoje = [];
+let totalLucroHoje = 0;
+
+// MENU LATERAL
 function abrirMenu() {
   document.getElementById("sidebar").classList.add("aberta");
   document.getElementById("overlay").classList.add("ativo");
@@ -17,7 +25,7 @@ document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") fecharMenu();
 });
 
-// Avatar / dropdown de perfil 
+// AVATAR / PERFIL
 function togglePerfil(event) {
   event.stopPropagation();
   document.getElementById("perfilDropdown").classList.toggle("aberto");
@@ -38,13 +46,12 @@ function carregarPerfil() {
   const token = sessionStorage.getItem("meuTccToken");
 
   if (!token) {
-    window.location.href = "/login/login.html";
+    window.location.href = "../login/login.html";
     return;
   }
   const nome = sessionStorage.getItem("usuarioNome") || "Funcionário(a)";
   const email = sessionStorage.getItem("usuarioEmail") || "Acesso Verificado";
 
-  // Vamos definir um cargo padrão para proprietária para liberar o menu todo por enquanto
   if(!sessionStorage.getItem("usuarioCargo")){
     sessionStorage.setItem("usuarioCargo", "proprietaria");
   }
@@ -54,15 +61,7 @@ function carregarPerfil() {
   document.getElementById("perfilEmail").textContent = email;
 }
 
-// Data de hoje no formato DD/MM/AAAA 
-function hojeFormatado() {
-  const d   = new Date();
-  const dia = String(d.getDate()).padStart(2, "0");
-  const mes = String(d.getMonth() + 1).padStart(2, "0");
-  return `${dia}/${mes}/${d.getFullYear()}`;
-}
-
-// Mostra data e hora UMA VEZ, abaixo da saudação
+// EXIBIÇÃO DE DATA E SAUDAÇÃO
 function mostrarData() {
   const hoje   = new Date();
   const opcoes = { weekday: "long", day: "2-digit", month: "long" };
@@ -75,111 +74,157 @@ function mostrarData() {
   }
 }
 
-// Saudação por horário 
 function saudacao() {
   const h   = new Date().getHours();
   const msg = h < 12 ? "Bom dia!" : h < 18 ? "Boa tarde!" : "Boa noite!";
   document.querySelector(".sub").textContent = msg;
 }
 
-// Dados - exemplo (futuramente virão do backend)
-const agendamentosDados = [
-  { nome: "Gabrielle Lima", hora: "10:00", servico: "Escova",   data: "16/05/2026", funcionario: "Carmem Lúcia" },
-  { nome: "Zilda Brito",    hora: "14:30", servico: "Manicure", data: "16/05/2026", funcionario: "Erika"        },
-];
+async function carregarDadosDoBackend() {
+  const token = sessionStorage.getItem("meuTccToken");
+  if (!token) return;
 
-// Carrega só os agendamentos do dia atual, filtrados pelo cargo 
-function carregarAgendamentosHoje() {
+  // 1. BUSCA DADOS FINANCEIROS REAIS
+  try {
+    const responseFin = await fetch("/financeiro", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    if (responseFin.ok) {
+      const todosLancamentos = await responseFin.json();
+      const hoje = new Date();
+
+      // Filtra apenas o que é ENTRADA e que foi criado HOJE
+      lancamentosFinanceirosHoje = todosLancamentos.filter(l => {
+        const dataLanc = new Date(l.data);
+        return l.tipo === "ENTRADA" &&
+            dataLanc.getDate() === hoje.getDate() &&
+            dataLanc.getMonth() === hoje.getMonth() &&
+            dataLanc.getFullYear() === hoje.getFullYear();
+      });
+
+      // Calcula o somatório do lucro do dia
+      totalLucroHoje = lancamentosFinanceirosHoje.reduce((acc, curr) => acc + parseFloat(curr.valor), 0);
+    }
+  } catch (error) {
+    console.error("Erro ao buscar dados financeiros para a Home:", error);
+  }
+
+  // 2. BUSCA AGENDAMENTOS REAIS (Com proteção caso o Controller não esteja pronto)
+  try {
+    const responseAgend = await fetch("/agendamento", {
+      method: "GET",
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+
+    if (responseAgend.ok) {
+      const todosAgendamentos = await responseAgend.json();
+      const hoje = new Date();
+
+      // Filtra agendamentos marcados para o dia de hoje
+      agendamentosDados = todosAgendamentos.filter(a => {
+        const dataAgend = new Date(a.data); // Ajuste aqui conforme o nome do campo de data do seu Java
+        return dataAgend.getDate() === hoje.getDate() &&
+            dataAgend.getMonth() === hoje.getMonth() &&
+            dataAgend.getFullYear() === hoje.getFullYear();
+      });
+
+      // Ordena por horário
+      agendamentosDados.sort((a, b) => a.hora.localeCompare(b.hora));
+    }
+  } catch (error) {
+    console.log("Rota /agendamento ainda não integrada ou offline. Usando lista vazia.");
+    agendamentosDados = [];
+  }
+
+  // Renderiza os componentes na tela com os dados atualizados do banco
+  renderizarAgendamentosHoje();
+}
+
+// CARREGA OS AGENDAMENTOS NA TELA
+function renderizarAgendamentosHoje() {
   const lista = document.getElementById("listaHome");
   if (!lista) return;
 
-  const hoje  = hojeFormatado();
-  const cargo = sessionStorage.getItem("usuarioCargo");
-  const nome  = sessionStorage.getItem("usuarioNome") || "";
-
-  let deHoje = agendamentosDados.filter(a => a.data === hoje);
-
-  if (cargo !== "proprietaria") {
-    deHoje = deHoje.filter(a =>
-      a.funcionario.toLowerCase().includes(nome.split(" ")[0].toLowerCase())
-    );
-  }
-
-  deHoje.sort((a, b) => a.hora.localeCompare(b.hora));
-
   lista.innerHTML = "";
 
-  if (deHoje.length === 0) {
+  if (agendamentosDados.length === 0) {
     const li = document.createElement("li");
     li.className   = "card-item-vazio";
-    li.textContent = "Nenhum agendamento";
+    li.textContent = "Nenhum agendamento para hoje";
     lista.appendChild(li);
     return;
   }
 
-  deHoje.forEach(a => {
+  agendamentosDados.forEach(a => {
     const li = document.createElement("li");
     li.className = "card-item";
+
+    // Mapeamento dinâmico baseado no objeto (Cliente e Serviço)
+    const clienteNome = a.cliente ? a.cliente.nome : (a.nome || "Cliente");
+    const servicoNome = a.servico ? a.servico.nome : (a.servico || "Serviço");
+    const horario = a.hora || "00:00";
+
     li.innerHTML = `
-      <span class="card-item-hora">${a.hora}</span>
+      <span class="card-item-hora">${horario}</span>
       <span class="card-item-texto">
-        <span class="card-item-nome">${a.nome}</span>
-        <span class="card-item-servico">${a.servico}</span>
+        <span class="card-item-nome">${clienteNome}</span>
+        <span class="card-item-servico">${servicoNome}</span>
       </span>
     `;
     lista.appendChild(li);
   });
 }
 
-// Lucro do dia - VAZIO QUANDO FECHA, TUDO QUANDO ABRE
+// LUCRO DO DIA (DADOS REAIS AGRUPADOS POR CATEGORIA DO ENUM)
 function carregarLucroHoje() {
   const lista = document.getElementById("listaLucro");
   if (!lista) return;
-
   lista.innerHTML = "";
 
-  const cargo = sessionStorage.getItem("usuarioCargo");
-  const nomeUsuario = sessionStorage.getItem("usuarioNome") || "";
-
-  const lucroDados = [
-    { nome: "Carmem", valor: "R$ 600,00", servicos: "4 serviços", valorNumerico: 600.00 },
-    { nome: "Erika",  valor: "R$ 200,00", servicos: "2 serviços", valorNumerico: 200.00 }
-  ];
-
-  let mostra = [];
-  let totalFuncionario = 0;
-
-  if (cargo === "proprietaria") {
-    mostra = lucroDados;
-  } else {
-    mostra = lucroDados.filter(l => nomeUsuario.toLowerCase().includes(l.nome.toLowerCase()));
-    if (mostra.length > 0) {
-      totalFuncionario = mostra[0].valorNumerico;
+  // Agrupa o faturamento de hoje pelas categorias do seu Enum Java (SALAO, COSMETICO, PESSOAL)
+  const faturamentoPorCategoria = {};
+  lancamentosFinanceirosHoje.forEach(l => {
+    const cat = l.categoria || "OUTROS";
+    if (!faturamentoPorCategoria[cat]) {
+      faturamentoPorCategoria[cat] = { valor: 0, qtd: 0 };
     }
-  }
+    faturamentoPorCategoria[cat].valor += parseFloat(l.valor);
+    faturamentoPorCategoria[cat].qtd += 1;
+  });
 
-  if (mostra.length === 0) {
+  const chaves = Object.keys(faturamentoPorCategoria);
+
+  if (chaves.length === 0) {
     const li = document.createElement("li");
     li.className = "card-item-vazio";
-    li.textContent = "Nenhum lucro registrado para este funcionário.";
+    li.textContent = "Nenhum faturamento registrado hoje.";
     lista.appendChild(li);
-    return totalFuncionario;
+    return;
   }
 
-  mostra.forEach(l => {
+  chaves.forEach(cat => {
     const li = document.createElement("li");
     li.className = "card-item";
+
+    // Tradução amigável dos Enums para exibição no Dashboard
+    let nomeExibicao = "Outros";
+    if (cat === "SALAO") nomeExibicao = "Serviços (Salão)";
+    if (cat === "COSMETICO") nomeExibicao = "Produtos (Cosméticos)";
+    if (cat === "PESSOAL") nomeExibicao = "Pessoal / Outros";
+
     li.innerHTML = `
-      <span class="card-item-hora" style="font-weight:600; color:var(--rose-gold-dark);">${l.valor}</span>
+      <span class="card-item-hora" style="font-weight:600; color:var(--rose-gold-dark);">
+        R$ ${faturamentoPorCategoria[cat].valor.toFixed(2).replace(".", ",")}
+      </span>
       <div class="card-item-texto">
-        <span class="card-item-nome">${l.nome}</span>
-        <span class="card-item-servico">${l.servicos}</span>
+        <span class="card-item-nome">${nomeExibicao}</span>
+        <span class="card-item-servico">${faturamentoPorCategoria[cat].qtd} transações</span>
       </div>
     `;
     lista.appendChild(li);
   });
-
-  return totalFuncionario;
 }
 
 function toggleLucro() {
@@ -187,37 +232,20 @@ function toggleLucro() {
   const lista = document.getElementById("listaLucro");
   const icone = document.getElementById("iconOlho");
   const aberto = icone.classList.contains("fa-eye");
-  const cargo = sessionStorage.getItem("usuarioCargo");
-  const nomeUsuario = sessionStorage.getItem("usuarioNome") || "";
 
   if (aberto) {
     el.textContent = "";
     lista.innerHTML = "";
     icone.classList.replace("fa-eye", "fa-eye-slash");
   } else {
-    // Abrir olho
-    if (cargo === "proprietaria") {
-      el.textContent = "R$ 800,00";
-      carregarLucroHoje(); // carrega todos os detalhes
-    } else {
-      // Funcionária: calcula o próprio total
-      const lucroDados = [
-        { nome: "Carmem", valorNumerico: 600.00 },
-        { nome: "Erika",  valorNumerico: 200.00 }
-      ];
-      const funcionario = lucroDados.find(l => nomeUsuario.toLowerCase().includes(l.nome.toLowerCase()));
-      if (funcionario) {
-        el.textContent = `R$ ${funcionario.valorNumerico.toFixed(2).replace('.', ',')}`;
-      } else {
-        el.textContent = "";
-      }
-      carregarLucroHoje(); // carrega apenas os detalhes da funcionária
-    }
+    // Exibe o total calculado direto do banco de dados
+    el.textContent = `R$ ${totalLucroHoje.toFixed(2).replace('.', ',')}`;
+    carregarLucroHoje();
     icone.classList.replace("fa-eye-slash", "fa-eye");
   }
 }
 
-// Permissões - esconde itens do menu restritos para funcionária
+// PERMISSÕES DE INTERFACE
 (function aplicarPermissoes() {
   const cargo = sessionStorage.getItem("usuarioCargo");
   const restritos = ["funcionarios.html", "servico.html", "financas.html"];
@@ -230,7 +258,6 @@ function toggleLucro() {
   });
 })();
 
-// CONTROLE DE VISIBILIDADE - Link "Ver detalhes" só para proprietária
 (function controlarLinkFinancas() {
   const cargo = sessionStorage.getItem("usuarioCargo");
   const linkDetalhes = document.getElementById("link-ver-detalhes");
@@ -239,31 +266,35 @@ function toggleLucro() {
   }
 })();
 
-// BOTÃO WHATSAPP - ENVIA AGENDAMENTOS DO DIA PARA A CARMEM
+// BOTÃO WHATSAPP - AGORA GERANDO TEXTO COM BASE NOS DADOS REAIS DO BANCO
 const btnWhatsHome = document.querySelector(".btn-whats");
 if (btnWhatsHome) {
   btnWhatsHome.onclick = function() {
-    const hoje = hojeFormatado();
-    const agendamentosHoje = agendamentosDados.filter(a => a.data === hoje);
-    
-    if (agendamentosHoje.length === 0) {
-      alert("Nenhum agendamento para hoje.");
+    const hoje = new Date().toLocaleDateString("pt-BR");
+
+    if (agendamentosDados.length === 0) {
+      alert("Nenhum agendamento real carregado para hoje.");
       return;
     }
-    
+
     let msg = `*RESUMO DE AGENDAMENTOS - ${hoje}*\n\n`;
-    agendamentosHoje.forEach(a => {
-      msg += `${a.hora} - ${a.nome} - ${a.servico}\n`;
+    agendamentosDados.forEach(a => {
+      const clienteNome = a.cliente ? a.cliente.nome : (a.nome || "Cliente");
+      const servicoNome = a.servico ? a.servico.nome : (a.servico || "Serviço");
+      const horario = a.hora || "00:00";
+      msg += `⏰ ${horario} - *${clienteNome}* - ${servicoNome}\n`;
     });
-    msg += `\nTotal: ${agendamentosHoje.length} agendamento(s)`;
-    
+    msg += `\nTotal: ${agendamentosDados.length} agendamento(s) no banco.`;
+
     const telefoneCarmem = "5561998015647";
     window.open(`https://wa.me/${telefoneCarmem}?text=${encodeURIComponent(msg)}`, "_blank");
   };
 }
 
-// Inicializa 
-mostrarData();
-saudacao();
-carregarPerfil();
-carregarAgendamentosHoje();
+// INICIALIZAÇÃO DA HOME
+window.addEventListener("load", function() {
+  mostrarData();
+  saudacao();
+  carregarPerfil();
+  carregarDadosDoBackend();
+});

@@ -1,0 +1,312 @@
+/* CSS COMPARTILHADO nas três telas de listagem
+   listar-servicos (dono do arquivo), os outros apontam pra cá via ../listar-servicos/listar-servicos.css
+   Se precisar mudar o visual das listagens, muda só aqui e muda nos três. */
+
+/* Caixa que agrupa o seletor de período e os botões de tipo  */
+.filtros {
+  padding: 14px 20px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+/* Linha superior: De / Até / Limpar */
+.filtro-periodo {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.filtro-data-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.filtro-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--rose-gold-dark);
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  padding-left: 2px;
+}
+
+.input-data {
+  width: 100%;
+  font-family: 'Jost', sans-serif;
+  font-size: 0.85rem;
+  padding: 10px 10px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: #fffdfa;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s;
+}
+.input-data:focus {
+  border-color: var(--rose-gold);
+  box-shadow: 0 0 0 3px rgba(212, 161, 152, 0.14);
+}
+
+.btn-limpar-data {
+  padding: 10px 16px;
+  background: transparent;
+  border: 1.5px solid var(--rose-gold-dark);
+  border-radius: 50px;
+  color: var(--rose-gold-dark);
+  font-family: 'Jost', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+  height: fit-content;
+}
+.btn-limpar-data:hover {
+  background: var(--rose-gold-dark);
+  color: #fff;
+}
+
+/* Linha inferior: Todos / Entradas / Saídas */
+.filtro-tipo {
+  display: flex;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.ftbtn {
+  flex: 1;
+  padding: 10px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 50px;
+  background: var(--white);
+  font-family: "Jost", sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-align: center;
+}
+.ftbtn:hover {
+  border-color: var(--rose-gold);
+  color: var(--rose-gold-dark);
+}
+.ftbtn.ativo {
+  background: linear-gradient(135deg, var(--rose-gold), var(--rose-gold-dark));
+  border-color: transparent;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* LISTA DE TRANSAÇÕES */
+.lista-wrap {
+  padding: 12px 20px 100px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.lista-vazia {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-soft);
+  font-size: 1rem;
+  font-style: italic;
+}
+
+/* Card individual */
+.transacao-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  border-left: 4px solid;
+  box-shadow: 0 2px 8px rgba(126, 93, 86, 0.06);
+  transition: box-shadow 0.2s;
+}
+.transacao-item:hover {
+  box-shadow: 0 4px 12px rgba(126, 93, 86, 0.1);
+}
+.transacao-item.entrada { border-color: #2e8b65; }
+.transacao-item.saida   { border-color: #c0392b; }
+
+/* Ícone */
+.transacao-icone {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+.transacao-icone.entrada { background: linear-gradient(135deg, #4caf87, #2e8b65); }
+.transacao-icone.saida   { background: linear-gradient(135deg, #e07070, #c0392b); }
+
+/* Corpo do card - layout coluna igual ao relatório */
+.transacao-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* Linha superior: valor à esquerda, data à direita */
+.transacao-topo {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.transacao-valor {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+.transacao-valor.entrada { color: #165c30; }
+.transacao-valor.saida   { color: #7a1c1c; }
+
+.transacao-data {
+  font-family: "Jost", sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Anotação embaixo, alinhada à esquerda, espaço total */
+.transacao-notas {
+  font-family: "Jost", sans-serif;
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  font-style: italic;
+  text-align: left;
+  padding: 0;
+  white-space: normal;
+  word-break: break-word;
+  max-width: 100%;
+  overflow: visible;
+  line-height: 1.45;
+}
+.transacao-notas:empty {
+  display: none;
+}
+
+/* CELULAR */
+@media (max-width: 480px) {
+  .transacao-item {
+    padding: 13px 12px;
+    gap: 10px;
+  }
+
+  .transacao-icone {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+  }
+}
+
+/* PC */
+@media (min-width: 768px) {
+  /* Força o container a ocupar toda tela */
+  .phone {
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+  
+  .tela-header { position: relative; }
+  .tela-titulo { flex: 1; text-align: center; }
+
+  .filtros {
+    max-width: 1100px;
+    margin: 16px auto 0;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 12px 24px;
+  }
+
+  .filtro-periodo {
+    display: flex;
+    flex: 2;
+    gap: 16px;
+    align-items: center;
+    grid-template-columns: none;
+  }
+  
+  .filtro-data-wrap {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .filtro-label {
+    font-size: 0.75rem;
+    padding-left: 0;
+  }
+  
+  .input-data {
+    width: auto;
+    min-width: 150px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .btn-limpar-data {
+    padding: 6px 20px;
+    font-size: 0.75rem;
+  }
+  
+  .filtro-tipo {
+    flex-shrink: 0;
+    gap: 10px;
+    margin-top: 0;
+  }
+  
+  .ftbtn {
+    padding: 8px 20px;
+    font-size: 0.8rem;
+  }
+
+  /* CARDS LARGOS */
+  .lista-wrap {
+    max-width: 800px !important;
+    width: 90% !important;
+    margin: 0 auto !important;
+  }
+  
+  .transacao-item {
+    padding: 12px 24px;
+  }
+  
+  .transacao-valor {
+    font-size: 1.2rem;
+  }
+  
+  .transacao-data {
+    font-size: 0.82rem;
+  }
+  
+  .transacao-notas {
+    font-size: 0.8rem;
+  }
+}

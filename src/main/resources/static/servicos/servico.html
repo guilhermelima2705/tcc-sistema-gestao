@@ -3,17 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <title>Espaço Carmem Lúcia | Funcionários</title>
+  <title>Espaço Carmem Lúcia | Serviços</title>
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=Jost:wght@300;400;500;600&family=Pinyon+Script&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  
   <link rel="stylesheet" href="../base.css" />
-  <link rel="stylesheet" href="funcionarios.css" />
+  <link rel="stylesheet" href="servico.css" />
 </head>
 <body>
 
-  <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+    <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
 
   <nav class="sidebar" id="sidebar">
     <div class="sidebar-header">
@@ -24,15 +26,15 @@
       <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
       <li><a href="../agendamentos/agendamentos.html"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
       <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
-      <li><a href="funcionarios.html" class="menu-ativo"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
-      <li><a href="../servicos/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+      <li><a href="../funcionarios/funcionarios.html"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+      <li><a href="servico.html" class="menu-ativo"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
       <li><a href="../financas/financas.html"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
     </ul>
   </nav>
 
   <main class="phone">
 
-    <header class="topbar">
+        <header class="topbar">
       <div class="topbar-logo">
         <a href="../index-home/home.html"><img src="../img/logo.png" alt="Logo CL" /></a>
       </div>
@@ -59,22 +61,24 @@
       <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
         <i class="fa-solid fa-arrow-left"></i>
       </button>
-      <h2 class="tela-titulo">Funcionários</h2>
+      <h2 class="tela-titulo">Serviços</h2>
     </div>
 
+    <!-- AÇÕES: NOVO SERVIÇO + PESQUISA -->
     <section class="clientes-acoes">
       <div class="clientes-btns">
-        <button class="btn-acao" onclick="window.location.href='cadastrar-funcionario.html'">
-          <i class="fa-solid fa-user-plus"></i> Novo Funcionário
+        <button class="btn-acao" onclick="window.location.href='cadastrar-servico.html'">
+          <i class="fa-solid fa-plus"></i> Novo Serviço
         </button>
       </div>
       <div class="clientes-pesquisa">
         <i class="fa-solid fa-magnifying-glass pesquisa-icone"></i>
         <input type="text" id="campoPesquisa" class="input-pesquisa"
-          placeholder="Pesquisar funcionário..." oninput="filtrarFuncionarios()" />
+          placeholder="Pesquisar serviço..." oninput="filtrarServicos()" />
       </div>
     </section>
 
+    <!-- TABELA DE SERVIÇOS -->
     <section class="clientes-tabela-wrap">
       <table class="clientes-tabela">
         <thead>
@@ -83,59 +87,60 @@
             <input type="checkbox" id="checkTodos" onchange="toggleTodos(this)" />
           </th>
           <th>Nome</th>
-          <th>E-mail</th>
-          <th>Cargo</th>
+          <th>Valor</th>
+          <th>Duração</th>
+          <th>Descrição</th>
         </tr>
         </thead>
         <tbody id="tabelaCorpo"></tbody>
       </table>
       <p class="tabela-vazia" id="tabelaVazia" style="display:none;">
-        Nenhum funcionário encontrado.
+        Nenhum serviço encontrado.
       </p>
     </section>
 
+
+
+    <!-- BOTÕES RODAPÉ: ATUALIZAR, EXCLUIR -->
     <div class="clientes-rodape">
       <button class="btn-acao agend-escada-1" id="btnAtualizar"
               onclick="abrirModalAtualizar()" disabled>
         <i class="fa-solid fa-pen-to-square"></i> Atualizar
       </button>
       <button class="btn-excluir agend-escada-2" id="btnExcluir"
-              onclick="confirmarExclusao()" disabled>
+              onclick="abrirModalExcluir()" disabled>
         <i class="fa-solid fa-trash"></i> Excluir
       </button>
     </div>
 
   </main>
 
-  <!-- Modal: Atualizar Funcionário -->
+  <!-- MODAL: ATUALIZAR SERVIÇO -->
   <div class="modal-overlay" id="modalAtualizar">
     <div class="modal">
       <div class="modal-header">
-        <h3>Atualizar Funcionário</h3>
+        <h3>Atualizar Serviço</h3>
         <button class="modal-fechar" onclick="fecharModal('modalAtualizar')">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
       <div class="modal-body">
-        <form id="formAtualizar">
+        <form id="formAtualizar" name="atualizar_servico">
           <div class="field">
-            <label for="editNome">Nome Completo</label>
-            <input type="text" id="editNome" name="editNome" required />
+            <label for="editNome">Nome do Serviço</label>
+            <input type="text" id="editNome" name="nome" required />
           </div>
           <div class="field">
-            <label for="editEmail">E-mail (Login)</label>
-            <input type="email" id="editEmail" name="editEmail" required />
+            <label for="editValor">Valor (R$)</label>
+            <input type="text" id="editValor" name="preco" placeholder="0,00" inputmode="numeric" oninput="formatarPreco(this)" required />
           </div>
           <div class="field">
-            <label for="editSenha">Senha de Acesso (Nova)</label>
-            <input type="password" id="editSenha" name="editSenha" placeholder="Deixe em branco para manter a atual" />
+            <label for="editDuracao">Duração (Minutos)</label>
+            <input type="number" id="editDuracao" name="duracaoMinutos" required />
           </div>
           <div class="field">
-            <label for="editPapel">Nível de Acesso</label>
-            <select id="editPapel" name="editPapel" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-family: 'Jost', sans-serif;">
-              <option value="ADMIN">Proprietária (ADMIN)</option>
-              <option value="USER">Funcionária (USER)</option>
-            </select>
+            <label for="editDescricao">Descrição</label>
+            <textarea id="editDescricao" name="descricao" style="min-height:80px;"></textarea>
           </div>
         </form>
       </div>
@@ -144,41 +149,40 @@
           <button type="button" class="btn-form-limpar" onclick="fecharModal('modalAtualizar')">
             <i class="fa-solid fa-xmark"></i> Cancelar
           </button>
-          <button type="submit" class="btn-form-cadastrar" form="formAtualizar">
-            <i class="fa-solid fa-check"></i> Salvar
+          <button type="button" class="btn-form-cadastrar" onclick="confirmarAtualizacao()">
+           <i class="fa-solid fa-check"></i> Salvar
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- MODAL EXCLUSÃO  -->
-  <div class="modal-overlay" id="modalConfirmarExclusaoFunc">
-    <div class="modal">
-      <div class="modal-body" style="text-align:center; padding:32px 24px;">
-        <i class="fa-solid fa-triangle-exclamation"
-           style="font-size:2.2rem; color:#e07070; display:block; margin-bottom:12px;"></i>
-        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; margin-bottom:8px;">
-          Confirmar exclusão
-        </h3>
-        <p id="textoConfirmacaoFunc"
-           style="font-size:0.87rem; color:var(--text-soft); margin-bottom:24px;">
-          Tem certeza que deseja excluir este funcionário?
-        </p>
-        <div style="display:flex; gap:10px;">
-          <button class="btn-form-limpar" style="flex:1;"
-                  onclick="fecharModal('modalConfirmarExclusaoFunc')">
-            Cancelar
-          </button>
-          <button class="btn-excluir" style="flex:1; justify-content:center;"
-                  onclick="executarExclusaoFunc()">
-            <i class="fa-solid fa-trash"></i> Excluir
-          </button>
-        </div>
+  <!-- MODAL - EXCLUIR SERVIÇO -->
+<div class="modal-overlay" id="modalExcluir">
+  <div class="modal">
+    <div class="modal-body" style="text-align:center; padding:32px 24px;">
+      <i class="fa-solid fa-triangle-exclamation"
+         style="font-size:2.2rem; color:#e07070; display:block; margin-bottom:12px;"></i>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; margin-bottom:8px;">
+        Excluir Serviço
+      </h3>
+      <p id="textoExcluir"
+         style="font-size:0.87rem; color:var(--text-soft); margin-bottom:24px;">
+        Tem certeza que deseja excluir este serviço?
+      </p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-form-limpar" style="flex:1;" onclick="fecharModal('modalExcluir')">
+          Cancelar
+        </button>
+        <button class="btn-excluir" style="flex:1; justify-content:center;" onclick="confirmarExclusao()">
+          <i class="fa-solid fa-trash"></i> Excluir
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  <script src="funcionario.js"></script>
+  <script src="servico.js"></script>
+
 </body>
 </html>
