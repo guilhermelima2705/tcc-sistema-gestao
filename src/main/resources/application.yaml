@@ -7,7 +7,7 @@ spring:
 
   security:
     user:
-      name: ${APP_ADMIN_USER:admin}        
+      name: ${APP_ADMIN_USER:admin}
       password: ${APP_ADMIN_PASSWORD:123456}
 
   datasource:
