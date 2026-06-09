@@ -1,21 +1,4 @@
 spring:
-  mail:
-    host: smtp.gmail.com
-    port: 456
-    username: "guilherme@gmail.com"
-    password: ""
-    properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
-            required: true
-          ssl:
-            protocols: TLSv1.2
-          connectiontimeout: 15000
-          timeout: 15000
-          writetimeout: 15000
 
   application:
     name: ProjetoFinalSalaoCarmemLucia

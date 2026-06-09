@@ -2,9 +2,14 @@ package com.guilherme.aulaspring.projetofinalsalaocarmemlucia.controller;
 
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.Cliente;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.model.dto.ClienteDto;
+import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.repository.ClienteRepository;
 import com.guilherme.aulaspring.projetofinalsalaocarmemlucia.service.ClienteService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +24,19 @@ import java.util.List;
 public class ClienteController {
 
     public final ClienteService service;
+    private final ClienteRepository clienteRepository;
 
     @PostMapping
     public ResponseEntity<?> salvar(@RequestBody @Valid ClienteDto cliente) {
         try {
             Cliente clienteEntidade = cliente.mapearParaCliente();
-            service.cadastrar(clienteEntidade);
+            Cliente clienteSalvo = service.cadastrar(clienteEntidade);
 
-            // http://localhost:8080/autores/id vai retornar uma url assim
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(clienteEntidade.getId()).toUri();
-            return ResponseEntity.created(location).build();
-        } catch (RuntimeException e) {  //criar um exception aqui
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}").buildAndExpand(clienteSalvo.getId()).toUri();
+
+            return ResponseEntity.created(location).body(clienteSalvo);
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -64,9 +71,25 @@ public class ClienteController {
    }
 
     @GetMapping
-    public ResponseEntity<List<Cliente>> listar() {
+    public ResponseEntity<Page<Cliente>> listarClientesPaginados(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+        Pageable paginacao = PageRequest.of(page, size, Sort.by("nome").ascending());
 
-        return ResponseEntity.ok(service.listarTodos());
+        Page<Cliente> resultado = clienteRepository.findAll(paginacao);
+        return ResponseEntity.ok(resultado);
+    }
+
+    @GetMapping("/buscar-por-telefone")
+    public ResponseEntity<?> buscarPorTelefone(@RequestParam("telefone") String telefone) {
+        Cliente cliente = service.buscarPorTelefonePuro(telefone);
+
+        if (cliente == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado.");
+        }
+
+        return ResponseEntity.ok(cliente);
     }
 
     @GetMapping({"{id}"})

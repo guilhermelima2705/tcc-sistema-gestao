@@ -20,7 +20,6 @@ public class FuncionarioService {
 
     private final FuncionarioRepository repository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailService emailService;
 
     public Funcionario cadastrar(Funcionario funcionario){
         funcionario.setSenha(passwordEncoder.encode(funcionario.getSenha()));
@@ -75,21 +74,6 @@ public class FuncionarioService {
         repository.save(f);
     }
 
-    public void gerarTokenRecuperacao(String email) {
-        Funcionario funcionario = (Funcionario) repository.findByEmail(email);
-        if (funcionario == null) {
-            throw new RuntimeException("E-mail não encontrado!");
-        }
-
-        String token = UUID.randomUUID().toString(); // Gera um código aleatório e único
-        funcionario.setResetToken(token);
-        funcionario.setResetTokenExpiry(LocalDateTime.now().plusMinutes(15)); // plusMInutes15 vai definir que esse codigo vai expirar em 15 minutos
-
-        repository.save(funcionario);
-
-        emailService.enviarEmail(email, "Recuperação de Senha",
-                "Seu código de recuperação é: " + token + "\n Ele expira em 15 minutos.");
-    }
 
     @Transactional
     public void redefinirSenha(String token, String novaSenha) {

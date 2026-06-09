@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -45,6 +46,18 @@ public class AgendamentoService {
 
         if (cliente.getDataNascimento().isAfter(java.time.LocalDate.now().minusYears(16))) {
             throw new RuntimeException("Não é permitido agendamento para menores de 16 anos.");
+        }
+
+        Integer duracaoDoServico = servico.getDuracaoMinutos();
+
+        Long totalConflitos = agendamentoRepository.contarConflitos(
+                dto.funcionarioId(),
+                dto.dataHora(),
+                duracaoDoServico
+        );
+
+        if (totalConflitos > 0) {
+            throw new RuntimeException("Este colaborador já possui um atendimento em andamento ou agendado dentro deste intervalo de tempo!");
         }
 
         Agendamento novoAgendamento = new Agendamento();
@@ -132,6 +145,17 @@ public class AgendamentoService {
                 agendamento.getDataHora(),
                 link
         );
+    }
+
+    public List<Agendamento> listarAgendamentosDeAmanha() {
+        // Pega a data de hoje e adiciona 1 dia (Amanhã)
+        java.time.LocalDate amanha = java.time.LocalDate.now().plusDays(1);
+
+        // Define o primeiro segundo do dia (00:00:00) e o último segundo (23:59:59)
+        LocalDateTime inicioDoDia = amanha.atStartOfDay();
+        LocalDateTime fimDoDia = amanha.atTime(23, 59, 59);
+
+        return agendamentoRepository.buscarAgendamentosDoDia(inicioDoDia, fimDoDia);
     }
 }
 

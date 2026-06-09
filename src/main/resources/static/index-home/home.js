@@ -111,7 +111,7 @@ async function carregarDadosDoBackend() {
     console.error("Erro ao buscar dados financeiros para a Home:", error);
   }
 
-  // 2. BUSCA AGENDAMENTOS REAIS (Com proteção caso o Controller não esteja pronto)
+  // 2. BUSCA AGENDAMENTOS REAIS
   try {
     const responseAgend = await fetch("/agendamento", {
       method: "GET",
@@ -122,19 +122,20 @@ async function carregarDadosDoBackend() {
       const todosAgendamentos = await responseAgend.json();
       const hoje = new Date();
 
-      // Filtra agendamentos marcados para o dia de hoje
+      // Filtra os agendamentos que estão marcados para o DIA DE HOJE
       agendamentosDados = todosAgendamentos.filter(a => {
-        const dataAgend = new Date(a.data); // Ajuste aqui conforme o nome do campo de data do seu Java
+        if (!a.dataHora) return false;
+        const dataAgend = new Date(a.dataHora);
         return dataAgend.getDate() === hoje.getDate() &&
             dataAgend.getMonth() === hoje.getMonth() &&
             dataAgend.getFullYear() === hoje.getFullYear();
       });
 
-      // Ordena por horário
-      agendamentosDados.sort((a, b) => a.hora.localeCompare(b.hora));
+      // Ordena cronologicamente pela String da dataHora
+      agendamentosDados.sort((a, b) => a.dataHora.localeCompare(b.dataHora));
     }
   } catch (error) {
-    console.log("Rota /agendamento ainda não integrada ou offline. Usando lista vazia.");
+    console.log("Erro ao buscar agendamentos:", error);
     agendamentosDados = [];
   }
 
@@ -161,10 +162,12 @@ function renderizarAgendamentosHoje() {
     const li = document.createElement("li");
     li.className = "card-item";
 
-    // Mapeamento dinâmico baseado no objeto (Cliente e Serviço)
-    const clienteNome = a.cliente ? a.cliente.nome : (a.nome || "Cliente");
-    const servicoNome = a.servico ? a.servico.nome : (a.servico || "Serviço");
-    const horario = a.hora || "00:00";
+    // Extrai o horário de forma segura a partir do LocalDateTime do Java
+    const dataObj = new Date(a.dataHora);
+    const horario = String(dataObj.getHours()).padStart(2, "0") + ":" + String(dataObj.getMinutes()).padStart(2, "0");
+
+    const clienteNome = a.cliente ? a.cliente.nome : "Cliente";
+    const servicoNome = a.servico ? a.servico.nome : "Serviço";
 
     li.innerHTML = `
       <span class="card-item-hora">${horario}</span>
@@ -266,22 +269,24 @@ function toggleLucro() {
   }
 })();
 
-// BOTÃO WHATSAPP - AGORA GERANDO TEXTO COM BASE NOS DADOS REAIS DO BANCO
+// BOTÃO WHATSAPP - RESUMO COMPATIVEL COM LOCALDATETIME
 const btnWhatsHome = document.querySelector(".btn-whats");
 if (btnWhatsHome) {
   btnWhatsHome.onclick = function() {
-    const hoje = new Date().toLocaleDateString("pt-BR");
+    const hojeStr = new Date().toLocaleDateString("pt-BR");
 
     if (agendamentosDados.length === 0) {
       alert("Nenhum agendamento real carregado para hoje.");
       return;
     }
 
-    let msg = `*RESUMO DE AGENDAMENTOS - ${hoje}*\n\n`;
+    let msg = `*RESUMO DE AGENDAMENTOS - ${hojeStr}*\n\n`;
     agendamentosDados.forEach(a => {
-      const clienteNome = a.cliente ? a.cliente.nome : (a.nome || "Cliente");
-      const servicoNome = a.servico ? a.servico.nome : (a.servico || "Serviço");
-      const horario = a.hora || "00:00";
+      const dataObj = new Date(a.dataHora);
+      const horario = String(dataObj.getHours()).padStart(2, "0") + ":" + String(dataObj.getMinutes()).padStart(2, "0");
+      const clienteNome = a.cliente ? a.cliente.nome : "Cliente";
+      const servicoNome = a.servico ? a.servico.nome : "Serviço";
+
       msg += `⏰ ${horario} - *${clienteNome}* - ${servicoNome}\n`;
     });
     msg += `\nTotal: ${agendamentosDados.length} agendamento(s) no banco.`;

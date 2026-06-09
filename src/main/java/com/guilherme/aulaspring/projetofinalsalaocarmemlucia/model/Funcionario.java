@@ -28,6 +28,8 @@ public class Funcionario implements UserDetails {
     private String email;
     @Column(name="senha", length = 255, nullable = false)
     private String senha;
+    @Column(name="telefone", length = 15, nullable = true)
+    private String telefone;
     @Column(name="ativo")
     private Boolean ativo = true;
     @Column(name="papel", length = 20, nullable = false)
@@ -41,11 +43,12 @@ public class Funcionario implements UserDetails {
     public Funcionario() {
     }
 
-    public Funcionario(Long id, String nome, String email, String senha, Boolean ativo, CategoriaFuncionario papel, String resetToken, LocalDateTime resetTokenExpiry) {
+    public Funcionario(Long id, String nome, String email, String senha, String telefone, Boolean ativo, CategoriaFuncionario papel, String resetToken, LocalDateTime resetTokenExpiry) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
+        this.telefone = telefone;
         this.ativo = ativo;
         this.papel = papel;
         this.resetToken = resetToken;

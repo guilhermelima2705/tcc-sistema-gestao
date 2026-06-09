@@ -1,24 +1,29 @@
-// Menu lateral
+// MENU LATERAL — Abre o painel lateral ao clicar no ícone hambúrguer
 function abrirMenu() {
   document.getElementById("sidebar").classList.add("aberta");
   document.getElementById("overlay").classList.add("ativo");
 }
+
+// MENU LATERAL — Fecha o painel lateral
 function fecharMenu() {
   document.getElementById("sidebar").classList.remove("aberta");
   document.getElementById("overlay").classList.remove("ativo");
 }
+
+// Fecha menu e modais ao pressionar a tecla ESC
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") {
     fecharMenu();
     fecharModal("modalAtualizar");
     fecharModal("modalAcoes");
+    fecharModal("modalConfirmarExcluir");
   }
 });
 
 function formatarTelefone(input) {
   let v = input.value.replace(/\D/g, '');
   if (v.length > 11) v = v.slice(0, 11);
-  
+
   let resultado = '';
   if (v.length <= 2) {
     resultado = v;
@@ -34,25 +39,27 @@ function formatarTelefone(input) {
   input.value = resultado;
 }
 
-// Avatar / dropdown de perfil
+// AVATAR — Exibe ou oculta o dropdown de perfil ao clicar no avatar
 function togglePerfil(event) {
   event.stopPropagation();
   document.getElementById("perfilDropdown").classList.toggle("aberto");
 }
+
 document.addEventListener("click", function () {
   document.getElementById("perfilDropdown").classList.remove("aberto");
 });
+
 function gerarIniciais(nome) {
   if (!nome) return "?";
   const partes = nome.trim().split(/\s+/);
   if (partes.length === 1) return partes[0].charAt(0).toUpperCase();
   return (partes[0].charAt(0) + partes[partes.length - 1].charAt(0)).toUpperCase();
 }
+
 function carregarPerfil() {
   const nome = sessionStorage.getItem("usuarioNome") || "Funcionário(a)";
   const email = sessionStorage.getItem("usuarioEmail") || "Acesso Verificado";
 
-  // Preenche direto, sem validação restritiva
   document.getElementById("avatar").textContent = gerarIniciais(nome);
   document.getElementById("perfilNome").textContent = nome;
   document.getElementById("perfilEmail").textContent = email;
@@ -62,35 +69,37 @@ function carregarPerfil() {
 function enviarLinkAgendamento(id) {
   const cliente = clientes.find(c => c.id === id);
   if (!cliente) return;
-  
-  // Extrai apenas os números do telefone
-  const telefone = cliente.numero.replace(/\D/g, '');
+
+  const telefone = cliente.telefone.replace(/\D/g, '');
   if (telefone.length < 10 || telefone.length > 11) {
     alert("Telefone do cliente inválido. Cadastre um número com 10 ou 11 dígitos.");
     return;
   }
-  
+
   const link = `${window.location.origin}/agendamento-cliente/agendamento-cliente.html?cliente=${cliente.id}`;
   const msg = `Olá *${cliente.nome}*, acesse o link para agendar seu horário:\n\n${link}`;
-  
+
   window.open(`https://wa.me/55${telefone}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
-// Dados dos clientes
-let clientes = []; // Começa vazia, carregada direto do MySQL
+// ✨ VARIÁVEIS DE CONTROLE DA PAGINAÇÃO DO JAVA
+let paginaAtual = 0;
+let totalPaginas = 0;
+let clientes = []; // Contém os clientes fatiados retornados da página atual
 
+// 1. FAZ O GET NA API DO SPRING BOOT USANDO PAGE E SIZE
 async function carregarClientesDaAPI() {
   const token = sessionStorage.getItem("meuTccToken");
 
   if (!token) {
-    // ALERTA DE DEBUG:
     alert("DEBUG: Token JWT não encontrado! Redirecionando para login...");
     window.location.href = "../login/login.html";
     return;
   }
 
   try {
-    const response = await fetch("/cliente", {
+    // ✨ URL modificada para injetar a página dinamicamente
+    const response = await fetch(`/cliente?page=${paginaAtual}&size=10`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -99,10 +108,14 @@ async function carregarClientesDaAPI() {
     });
 
     if (response.ok) {
-      clientes = await response.json();
+      const dadosPaginados = await response.json();
+
+      clientes = dadosPaginados.content;       // ✨ Extrai a lista do array content
+      totalPaginas = dadosPaginados.totalPages;  // ✨ Salva o total de páginas geradas no banco
+
       renderizarTabela(clientes);
+      atualizarControlesPaginacao();             // ✨ Atualiza desabilitação dos botões
     } else if (response.status === 403 || response.status === 401) {
-      // ALERTA DE DEBUG:
       alert(`DEBUG: O Java rejeitou o Token (Erro ${response.status}). O Token expirou ou é inválido!`);
       window.location.href = "../login/login.html";
     } else {
@@ -117,15 +130,16 @@ async function carregarClientesDaAPI() {
 // Função para formatar o telefone apenas visualmente na tabela
 function formatarTelefoneTexto(tel) {
   if (!tel) return "Sem número";
-  const num = tel.replace(/\D/g, ''); // Remove tudo que não for número
+  const num = tel.replace(/\D/g, '');
   if (num.length === 11) {
     return `(${num.slice(0,2)}) ${num.slice(2,7)}-${num.slice(7)}`;
   } else if (num.length === 10) {
     return `(${num.slice(0,2)}) ${num.slice(2,6)}-${num.slice(6)}`;
   }
-  return tel; // Se vier um número muito louco, retorna como está
+  return tel;
 }
 
+// 2. RENDERIZA A TABELA COM BASE NOS DADOS PAGINADOS
 function renderizarTabela(lista) {
   const corpo = document.getElementById("tabelaCorpo");
   const vazia = document.getElementById("tabelaVazia");
@@ -133,7 +147,7 @@ function renderizarTabela(lista) {
 
   corpo.innerHTML = "";
 
-  // Ordena os ativos primeiro
+  // Mantém os ativos no topo dentro da página atual
   const ordenados = [...lista].sort((a, b) => b.ativo - a.ativo);
 
   if (ordenados.length === 0) {
@@ -172,14 +186,50 @@ function renderizarTabela(lista) {
   atualizarBotoes();
 }
 
+// ✨ CONTROLE DE BUSCA DO COMPONENT (Ajustado para o fluxo paginado)
 function filtrarClientes() {
   const termo = document.getElementById("campoPesquisa").value.toLowerCase();
+
+  if (termo === "") {
+    carregarClientesDaAPI(); // Se limpar a barra, recarrega a página atual estável
+    return;
+  }
+
+  // Filtra em tempo real dentro dos 10 elementos que estão na memória da página
   const filtrados = clientes.filter(c =>
       c.nome.toLowerCase().includes(termo) ||
       (c.telefone && c.telefone.includes(termo)) ||
       (c.observacoes && c.observacoes.toLowerCase().includes(termo))
   );
   renderizarTabela(filtrados);
+}
+
+// ✨ GERENCIADORES DINÂMICOS DE EVENTO DE PÁGINA
+function atualizarControlesPaginacao() {
+  const btnAnterior = document.getElementById("btnAnterior");
+  const btnProximo = document.getElementById("btnProximo");
+  const indicadorPagina = document.getElementById("indicadorPagina");
+
+  if (btnAnterior) btnAnterior.disabled = paginaAtual === 0;
+  if (btnProximo) btnProximo.disabled = paginaAtual >= totalPaginas - 1 || totalPaginas === 0;
+
+  if (indicadorPagina) {
+    indicadorPagina.textContent = totalPaginas > 0 ? `Página ${paginaAtual + 1} de ${totalPaginas}` : "Página 0 de 0";
+  }
+}
+
+function paginaAnterior() {
+  if (paginaAtual > 0) {
+    paginaAtual--;
+    carregarClientesDaAPI();
+  }
+}
+
+function paginaProxima() {
+  if (paginaAtual < totalPaginas - 1) {
+    paginaAtual++;
+    carregarClientesDaAPI();
+  }
 }
 
 function toggleTodos(master) {
@@ -195,8 +245,10 @@ function atualizarBotoes() {
 
   const btnAtualizar = document.getElementById("btnAtualizar");
   const btnExcluir = document.getElementById("btnExcluir");
+  const btnOpcoes = document.getElementById("btnOpcoes");
 
   if (btnAtualizar) btnAtualizar.disabled = marcados !== 1;
+  if (btnOpcoes) btnOpcoes.disabled = marcados !== 1;
   if (btnExcluir) btnExcluir.disabled = marcados === 0;
 }
 
@@ -210,7 +262,7 @@ function abrirModalAtualizar() {
   const c = getClienteSelecionado();
   if (!c) return;
   document.getElementById("editNome").value   = c.nome;
-  document.getElementById("editNumero").value = c.telefone || ""; // Campo ID 'editNumero' mantido do HTML
+  document.getElementById("editNumero").value = c.telefone || "";
   document.getElementById("editObs").value    = c.observacoes || "";
   document.getElementById("modalAtualizar").classList.add("aberto");
 }
@@ -234,7 +286,7 @@ async function salvarAtualizacao() {
     telefone: telefoneNovo,
     observacoes: obsNova,
     cpf: c.cpf,
-    dataNascimento: c.dataNascimento // Mantém a data cadastrada para não dar null
+    dataNascimento: c.dataNascimento
   };
 
   try {
@@ -249,7 +301,7 @@ async function salvarAtualizacao() {
 
     if (response.ok) {
       fecharModal("modalAtualizar");
-      carregarClientesDaAPI(); // Recarrega do banco atualizado
+      carregarClientesDaAPI();
     } else {
       alert("Erro ao atualizar dados do cliente no servidor.");
     }
@@ -316,8 +368,7 @@ function confirmarExclusao() {
   document.getElementById("modalConfirmarExcluir").classList.add("aberto");
 }
 
-//Deleta no banco
-async function executarExclusao() {
+async function ejecutarExclusao() {
   const ids = window._idsParaExcluir || [];
   if (ids.length === 0) return;
   const token = sessionStorage.getItem("meuTccToken");
@@ -350,7 +401,6 @@ document.addEventListener("click", function (e) {
   }
 });
 
-// Form de atualizar
 const formAtualizar = document.getElementById("formAtualizar");
 if (formAtualizar) {
   formAtualizar.addEventListener("submit", function(event) {
@@ -359,7 +409,6 @@ if (formAtualizar) {
   });
 }
 
-// Permissões de botões baseadas no Cargo
 (function controlarBotoesCliente() {
   const cargo = sessionStorage.getItem("usuarioCargo");
   if (cargo !== "proprietaria") {
@@ -368,6 +417,6 @@ if (formAtualizar) {
   }
 })();
 
-// Inicializa a tela puxando do banco de dados
+// Inicializa a tela puxando do banco de dados de forma paginada
 carregarPerfil();
 carregarClientesDaAPI();

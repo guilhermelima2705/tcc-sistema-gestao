@@ -13,73 +13,79 @@
 </head>
 <body>
 
-  <main class="phone">
+<main class="phone">
 
-    <!-- BANNER -->
-    <section class="banner">
-      <div class="circle c1"></div>
-      <div class="circle c2"></div>
-      <div class="logo-wrap">
-        <img src="../img/logo.png" alt="Logo Carmem Lúcia" />
-        <span class="salon-name">
+  <section class="banner">
+    <div class="circle c1"></div>
+    <div class="circle c2"></div>
+    <div class="logo-wrap">
+      <img src="../img/logo.png" alt="Logo Carmem Lúcia" />
+      <span class="salon-name">
           <small>Espaço</small>
           Carmem Lúcia
         </span>
+    </div>
+  </section>
+
+  <section class="card">
+
+    <div class="card-header">
+      <p class="eyebrow">Área do Cliente</p>
+      <h1>Bem-vindo(a)</h1>
+    </div>
+
+    <form id="formAgendamento">
+
+      <div class="field">
+        <label for="telCliente">Tel / Whatsapp</label>
+        <div style="display: flex; gap: 10px;">
+          <input type="tel" id="telCliente" name="telCliente" maxlength="15" placeholder="Digite seu número" style="flex: 1;" />
+          <button type="button" id="btnVerificarTel" onclick="verificarTelefone()" class="btn-form-cadastrar" style="width: auto; padding: 0 15px;">Verificar</button>
+        </div>
       </div>
-    </section>
 
-    <!-- CARD -->
-    <section class="card">
-
-      <div class="card-header">
-        <p class="eyebrow">Área do Cliente</p>
-        <h1>Bem-vindo(a)</h1>
-      </div>
-
-      <form id="formAgendamento">
-
+      <div id="secaoCadastroCliente" style="display: none; border-left: 2px solid var(--rose-gold); padding-left: 10px; margin-bottom: 15px;">
+        <p style="font-size: 0.8rem; color: var(--rose-gold-dark); font-weight: 600; margin-bottom: 10px;">✨ Não encontramos seu cadastro. Preencha seus dados para continuar:</p>
         <div class="field">
-          <label for="nomeCliente">Nome</label>
+          <label for="nomeCliente">Nome Completo</label>
           <input type="text" id="nomeCliente" name="nomeCliente" placeholder="Digite seu nome completo" />
         </div>
+        <div class="field">
+          <label for="dataNascimento">Data de Nascimento</label>
+          <input type="date" id="dataNascimento" name="dataNascimento" />
+        </div>
+      </div>
+
+      <div id="secaoDadosAgendamento" style="display: none;">
+        <p id="saudacaoClienteExistente" style="font-size: 0.85rem; color: var(--text); font-weight: 600; margin-bottom: 15px;"></p>
 
         <div class="field">
-          <label for="telCliente">Tel / Whatsapp</label>
-          <input type="tel" id="telCliente" name="telCliente" maxlength="15" placeholder="Digite seu número" />
+          <label for="funcAgend">Colaborador</label>
+          <select id="funcAgend" name="funcAgend" class="input-select" onchange="liberarData()">
+            <option value="">Selecione o profissional...</option>
+          </select>
         </div>
 
         <div class="field">
           <label for="dataAgend">Data</label>
-          <input type="date" id="dataAgend" name="dataAgend" />
+          <input type="date" id="dataAgend" name="dataAgend" disabled onchange="liberarHorarios()" />
         </div>
 
         <div class="field">
           <label for="horaAgend">Hora</label>
-          <input type="time" id="horaAgend" name="horaAgend" />
+          <select id="horaAgend" name="horaAgend" class="input-select" disabled>
+            <option value="">Escolha a data primeiro...</option>
+          </select>
         </div>
 
         <div class="field">
           <label for="servicoAgend">Serviços</label>
           <select id="servicoAgend" name="servicoAgend" class="input-select">
             <option value="">Selecione o serviço...</option>
-            <option value="Corte">Corte</option>
-            <option value="Escova">Escova</option>
-            <option value="Manicure">Manicure</option>
           </select>
         </div>
 
-        <div class="field">
-          <label for="funcAgend">Colaborador</label>
-          <select id="funcAgend" name="funcAgend" class="input-select">
-            <option value="">Selecione o profissional...</option>
-            <option value="Carmem Lúcia">Carmem Lúcia</option>
-            <option value="Erika">Erika</option>
-          </select>
-        </div>
-
-        <div id="msgAgendamento" class="msg"></div>
-
-        <div class="form-btns">
+        <div class="form-btns" style="margin-top: 20px;">
           <button type="button" class="btn-form-limpar" onclick="limparFormulario()">
             <i class="fa-solid fa-eraser"></i> Limpar
           </button>
@@ -87,60 +93,59 @@
             <i class="fa-solid fa-calendar-check"></i> Agendar
           </button>
         </div>
-
-      </form>
-
-    </section>
-
-  </main>
-
-  <!-- BOTÃO ACESSIBILIDADE FIXO — fora do <main> para position:fixed funcionar certo -->
-  <button class="btn-acessibilidade-fixo" id="btnAcess"
-          onclick="toggleAcessibilidade()"
-          aria-label="Acessibilidade"
-          title="Acessibilidade">
-<svg width="54" height="54" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#29B6F6"/>
-      <stop offset="100%" stop-color="#1565C0"/>
-    </linearGradient>
-  </defs>
-  <circle cx="128" cy="128" r="118" fill="url(#blueGradient)"/>
-  <circle cx="128" cy="128" r="104" fill="none" stroke="#FFFFFF" stroke-width="6"/>
-  <circle cx="128" cy="62" r="12" fill="#FFFFFF"/>
-  <path d="M66 87 Q128 98 190 87" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
-  <path d="M128 92 L128 154" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
-  <path d="M128 154 L108 206" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
-  <path d="M128 154 L148 206" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
-</svg>
-  </button>
-
-  <!-- MODAL: confirmação + envio WhatsApp -->
-  <div class="modal-overlay" id="modalSucesso">
-    <div class="modal">
-      <div class="modal-body" style="text-align:center; padding:32px 24px;">
-        <i class="fa-solid fa-circle-check"
-           style="font-size:2.5rem; color:var(--rose-gold); display:block; margin-bottom:12px;"></i>
-        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; margin-bottom:8px;">
-          Agendamento Pronto!
-        </h3>
-        <p style="font-size:0.85rem; color:var(--text-soft); margin-bottom:20px;">
-          Toque em <strong>Enviar pelo WhatsApp</strong> para confirmar seu horário com o Espaço Carmem Lúcia.
-        </p>
-        <button type="button" class="btn-whats-modal" onclick="enviarWhatsApp()">
-          <i class="fa-brands fa-whatsapp" style="font-size:1.2rem;"></i>
-          Enviar pelo WhatsApp
-        </button>
-        <button type="button" class="btn-form-limpar"
-                style="margin-top:10px;width:100%;display:flex;justify-content:center;"
-                onclick="fecharModal()">
-          Fechar
-        </button>
       </div>
+
+      <div id="msgAgendamento" class="msg"></div>
+
+    </form> </section>
+
+</main>
+
+<button class="btn-acessibilidade-fixo" id="btnAcess"
+        onclick="toggleAcessibilidade()"
+        aria-label="Acessibilidade"
+        title="Acessibilidade">
+  <svg width="54" height="54" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#29B6F6"/>
+        <stop offset="100%" stop-color="#1565C0"/>
+      </linearGradient>
+    </defs>
+    <circle cx="128" cy="128" r="118" fill="url(#blueGradient)"/>
+    <circle cx="128" cy="128" r="104" fill="none" stroke="#FFFFFF" stroke-width="6"/>
+    <circle cx="128" cy="62" r="12" fill="#FFFFFF"/>
+    <path d="M66 87 Q128 98 190 87" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+    <path d="M128 92 L128 154" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+    <path d="M128 154 L108 206" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+    <path d="M128 154 L148 206" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+  </svg>
+</button>
+
+<div class="modal-overlay" id="modalSucesso">
+  <div class="modal">
+    <div class="modal-body" style="text-align:center; padding:32px 24px;">
+      <i class="fa-solid fa-circle-check"
+         style="font-size:2.5rem; color:var(--rose-gold); display:block; margin-bottom:12px;"></i>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; margin-bottom:8px;">
+        Agendamento Pronto!
+      </h3>
+      <p style="font-size:0.85rem; color:var(--text-soft); margin-bottom:20px;">
+        Toque em <strong>Enviar pelo WhatsApp</strong> para confirmar seu horário com o Espaço Carmem Lúcia.
+      </p>
+      <button type="button" class="btn-whats-modal" onclick="enviarWhatsApp()">
+        <i class="fa-brands fa-whatsapp" style="font-size:1.2rem;"></i>
+        Enviar pelo WhatsApp
+      </button>
+      <button type="button" class="btn-form-limpar"
+              style="margin-top:10px;width:100%;display:flex;justify-content:center;"
+              onclick="fecharModal()">
+        Fechar
+      </button>
     </div>
   </div>
+</div>
 
-  <script src="agendamento-cliente.js"></script>
+<script src="agendamento-cliente.js"></script>
 </body>
 </html>

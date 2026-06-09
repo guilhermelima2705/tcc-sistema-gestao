@@ -36,16 +36,16 @@ public class FuncionarioController {
     @PutMapping("{id}")
     public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody @Valid FuncionarioDto dto) {
         try {
-            Funcionario funcionarioOptional = service.buscarPorId(id);
+            Funcionario funcionario = service.buscarPorId(id);
 
-            funcionarioOptional.setNome(dto.nome());
-            funcionarioOptional.setEmail(dto.email());
-            funcionarioOptional.setPapel(dto.papel());
-            // funcionarioOptional.setSenha(String.valueOf(dto.senha()));  perguntar pro professor se posso alterar a senha diretamente aqui
+            funcionario.setNome(dto.nome());
+            funcionario.setEmail(dto.email());
+            funcionario.setPapel(dto.papel());
+            funcionario.setTelefone(dto.telefone());
 
-            service.atualizar(funcionarioOptional);
+            service.atualizar(funcionario);
             return ResponseEntity.noContent().build();
-        }catch (RuntimeException e) {  //criar um exception aqui
+        } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

@@ -37,15 +37,6 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<?> forgotPassword(@RequestBody EmailRequest request) {
-        try {
-            funcionarioService.gerarTokenRecuperacao(request.email());
-            return ResponseEntity.ok("Um e-mail de recuperação foi enviado para: " + request.email());
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-    }
 
     @PostMapping("/reset-password")
     public ResponseEntity<?> resetPassword(@RequestBody ResetPasswordDTO dto) {

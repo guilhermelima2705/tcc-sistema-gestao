@@ -13,6 +13,7 @@ import jakarta.validation.constraints.Size;
 public record FuncionarioDto(
         @NotBlank String nome,
         @Email String email,
+        String telefone,
         @NotBlank @Size(min = 6, max = 6) String senha,
         @NotNull CategoriaFuncionario papel
 ) {
@@ -21,6 +22,7 @@ public record FuncionarioDto(
         Funcionario f = new Funcionario();
         f.setNome(this.nome);
         f.setEmail(this.email);
+        f.setTelefone(this.telefone);
         f.setSenha(this.senha);
         f.setPapel(this.papel);
         return f;

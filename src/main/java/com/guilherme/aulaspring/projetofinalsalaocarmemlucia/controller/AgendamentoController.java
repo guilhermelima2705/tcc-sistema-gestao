@@ -66,4 +66,10 @@ public class AgendamentoController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @GetMapping("/amanha")
+    public ResponseEntity<List<Agendamento>> listarParaAmanha() {
+        List<Agendamento> lista = service.listarAgendamentosDeAmanha();
+        return ResponseEntity.ok(lista);
+    }
 }

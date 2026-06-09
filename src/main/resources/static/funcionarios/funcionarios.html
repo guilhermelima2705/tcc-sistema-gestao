@@ -13,172 +13,217 @@
 </head>
 <body>
 
-  <div class="overlay" id="overlay" onclick="fecharMenu()"></div>
+<div class="overlay" id="overlay" onclick="fecharMenu()"></div>
 
-  <nav class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-      <img src="../img/logo.png" alt="Logo" class="sidebar-logo" />
-      <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <img src="../img/logo.png" alt="Logo" class="sidebar-logo" />
+    <span class="sidebar-nome">Espaço Carmem Lúcia</span>
+  </div>
+  <ul class="sidebar-menu">
+    <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
+    <li><a href="../agendamentos/agendamentos.html"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
+    <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
+    <li><a href="funcionarios.html" class="menu-ativo"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
+    <li><a href="../servicos/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
+    <li><a href="../financas/financas.html"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
+  </ul>
+</nav>
+
+<main class="phone">
+
+  <header class="topbar">
+    <div class="topbar-logo">
+      <a href="../index-home/home.html"><img src="../img/logo.png" alt="Logo CL" /></a>
     </div>
-    <ul class="sidebar-menu">
-      <li><a href="../index-home/home.html"><i class="fa-solid fa-house"></i> Início</a></li>
-      <li><a href="../agendamentos/agendamentos.html"><i class="fa-solid fa-calendar-days"></i> Agendamentos</a></li>
-      <li><a href="../clientes/clientes.html"><i class="fa-solid fa-users"></i> Clientes</a></li>
-      <li><a href="funcionarios.html" class="menu-ativo"><i class="fa-solid fa-id-badge"></i> Funcionários</a></li>
-      <li><a href="../servicos/servico.html"><i class="fa-solid fa-scissors"></i> Serviços</a></li>
-      <li><a href="../financas/financas.html"><i class="fa-solid fa-chart-line"></i> Finanças</a></li>
-    </ul>
-  </nav>
-
-  <main class="phone">
-
-    <header class="topbar">
-      <div class="topbar-logo">
-        <a href="../index-home/home.html"><img src="../img/logo.png" alt="Logo CL" /></a>
-      </div>
-      <div class="topbar-right">
-        <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
-          <span></span><span></span><span></span>
-        </button>
-        <div class="avatar-wrap" id="avatarWrap">
-          <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
-          <div class="perfil-dropdown" id="perfilDropdown">
-            <div class="perfil-info">
-              <p class="perfil-nome" id="perfilNome"></p>
-              <p class="perfil-email" id="perfilEmail"></p>
-            </div>
-            <a href="../login/login.html" class="perfil-sair">
-              <i class="fa-solid fa-right-from-bracket"></i> Sair
-            </a>
+    <div class="topbar-right">
+      <button class="btn-hamburguer" onclick="abrirMenu()" aria-label="Abrir menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="avatar-wrap" id="avatarWrap">
+        <div class="avatar" id="avatar" onclick="togglePerfil(event)"></div>
+        <div class="perfil-dropdown" id="perfilDropdown">
+          <div class="perfil-info">
+            <p class="perfil-nome" id="perfilNome"></p>
+            <p class="perfil-email" id="perfilEmail"></p>
           </div>
+          <a href="../login/login.html" class="perfil-sair">
+            <i class="fa-solid fa-right-from-bracket"></i> Sair
+          </a>
         </div>
       </div>
-    </header>
-
-    <div class="tela-header">
-      <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
-        <i class="fa-solid fa-arrow-left"></i>
-      </button>
-      <h2 class="tela-titulo">Funcionários</h2>
     </div>
+  </header>
 
-    <section class="clientes-acoes">
-      <div class="clientes-btns">
-        <button class="btn-acao" onclick="window.location.href='cadastrar-funcionario.html'">
-          <i class="fa-solid fa-user-plus"></i> Novo Funcionário
-        </button>
-      </div>
-      <div class="clientes-pesquisa">
-        <i class="fa-solid fa-magnifying-glass pesquisa-icone"></i>
-        <input type="text" id="campoPesquisa" class="input-pesquisa"
-          placeholder="Pesquisar funcionário..." oninput="filtrarFuncionarios()" />
-      </div>
-    </section>
+  <div class="tela-header">
+    <button class="btn-voltar" onclick="history.back()" aria-label="Voltar">
+      <i class="fa-solid fa-arrow-left"></i>
+    </button>
+    <h2 class="tela-titulo">Funcionários</h2>
+  </div>
 
-    <section class="clientes-tabela-wrap">
-      <table class="clientes-tabela">
-        <thead>
-        <tr>
-          <th class="col-check">
-            <input type="checkbox" id="checkTodos" onchange="toggleTodos(this)" />
-          </th>
-          <th>Nome</th>
-          <th>E-mail</th>
-          <th>Cargo</th>
-        </tr>
-        </thead>
-        <tbody id="tabelaCorpo"></tbody>
-      </table>
-      <p class="tabela-vazia" id="tabelaVazia" style="display:none;">
-        Nenhum funcionário encontrado.
-      </p>
-    </section>
-
-    <div class="clientes-rodape">
-      <button class="btn-acao agend-escada-1" id="btnAtualizar"
-              onclick="abrirModalAtualizar()" disabled>
-        <i class="fa-solid fa-pen-to-square"></i> Atualizar
-      </button>
-      <button class="btn-excluir agend-escada-2" id="btnExcluir"
-              onclick="confirmarExclusao()" disabled>
-        <i class="fa-solid fa-trash"></i> Excluir
+  <section class="clientes-acoes">
+    <div class="clientes-btns">
+      <button class="btn-acao" onclick="window.location.href='cadastrar-funcionario.html'">
+        <i class="fa-solid fa-user-plus"></i> Novo Funcionário
       </button>
     </div>
+    <div class="clientes-pesquisa">
+      <i class="fa-solid fa-magnifying-glass pesquisa-icone"></i>
+      <input type="text" id="campoPesquisa" class="input-pesquisa"
+             placeholder="Pesquisar funcionário..." oninput="filtrarFuncionarios()" />
+    </div>
+  </section>
 
-  </main>
+  <section class="clientes-tabela-wrap">
+    <table class="clientes-tabela">
+      <thead>
+      <tr>
+        <th class="col-check">
+          <input type="checkbox" id="checkTodos" onchange="toggleTodos(this)" />
+        </th>
+        <th>Nome</th>
+        <th>E-mail</th>
+        <th>Telefone</th> <th>Cargo</th>
+      </tr>
+      </thead>
+      <tbody id="tabelaCorpo"></tbody>
+    </table>
+    <p class="tabela-vazia" id="tabelaVazia" style="display:none;">
+      Nenhum funcionário encontrado.
+    </p>
+  </section>
 
-  <!-- Modal: Atualizar Funcionário -->
-  <div class="modal-overlay" id="modalAtualizar">
-    <div class="modal">
-      <div class="modal-header">
-        <h3>Atualizar Funcionário</h3>
-        <button class="modal-fechar" onclick="fecharModal('modalAtualizar')">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="formAtualizar">
-          <div class="field">
-            <label for="editNome">Nome Completo</label>
-            <input type="text" id="editNome" name="editNome" required />
-          </div>
-          <div class="field">
-            <label for="editEmail">E-mail (Login)</label>
-            <input type="email" id="editEmail" name="editEmail" required />
-          </div>
-          <div class="field">
-            <label for="editSenha">Senha de Acesso (Nova)</label>
-            <input type="password" id="editSenha" name="editSenha" placeholder="Deixe em branco para manter a atual" />
-          </div>
-          <div class="field">
-            <label for="editPapel">Nível de Acesso</label>
-            <select id="editPapel" name="editPapel" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-family: 'Jost', sans-serif;">
-              <option value="ADMIN">Proprietária (ADMIN)</option>
-              <option value="USER">Funcionária (USER)</option>
-            </select>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <div class="form-btns" style="width:100%">
-          <button type="button" class="btn-form-limpar" onclick="fecharModal('modalAtualizar')">
-            <i class="fa-solid fa-xmark"></i> Cancelar
-          </button>
-          <button type="submit" class="btn-form-cadastrar" form="formAtualizar">
-            <i class="fa-solid fa-check"></i> Salvar
-          </button>
+  <div class="clientes-rodape">
+    <button class="btn-acao agend-escada-1" id="btnFolga"
+            onclick="abrirModalFolga()" disabled style="background-color: #6a827f;">
+      <i class="fa-solid fa-calendar-minus"></i> Lançar Folga
+    </button>
+
+    <button class="btn-acao agend-escada-1" id="btnAtualizar"
+            onclick="abrirModalAtualizar()" disabled>
+      <i class="fa-solid fa-pen-to-square"></i> Atualizar
+    </button>
+    <button class="btn-excluir agend-escada-2" id="btnExcluir"
+            onclick="confirmarExclusao()" disabled>
+      <i class="fa-solid fa-trash"></i> Excluir
+    </button>
+  </div>
+
+</main>
+
+<div class="modal-overlay" id="modalAtualizar">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Atualizar Funcionário</h3>
+      <button class="modal-fechar" onclick="fecharModal('modalAtualizar')">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form id="formAtualizar">
+        <div class="field">
+          <label for="editNome">Nome Completo</label>
+          <input type="text" id="editNome" name="editNome" required />
         </div>
+        <div class="field">
+          <label for="editEmail">E-mail (Login)</label>
+          <input type="email" id="editEmail" name="editEmail" required />
+        </div>
+
+        <div class="field">
+          <label for="editTelefone">Telefone / WhatsApp</label>
+          <input type="tel" id="editTelefone" name="editTelefone" placeholder="(61) 99999-9999" />
+        </div>
+
+        <div class="field">
+          <label for="editSenha">Senha de Acesso (Nova)</label>
+          <input type="password" id="editSenha" name="editSenha" placeholder="Deixe em branco para manter a atual" />
+        </div>
+        <div class="field">
+          <label for="editPapel">Nível de Acesso</label>
+          <select id="editPapel" name="editPapel" required style="width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: var(--radius-md); font-family: 'Jost', sans-serif;">
+            <option value="ADMIN">Proprietária (ADMIN)</option>
+            <option value="USER">Funcionária (USER)</option>
+          </select>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <div class="form-btns" style="width:100%">
+        <button type="button" class="btn-form-limpar" onclick="fecharModal('modalAtualizar')">
+          <i class="fa-solid fa-xmark"></i> Cancelar
+        </button>
+        <button type="submit" class="btn-form-cadastrar" form="formAtualizar">
+          <i class="fa-solid fa-check"></i> Salvar
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- MODAL EXCLUSÃO  -->
-  <div class="modal-overlay" id="modalConfirmarExclusaoFunc">
-    <div class="modal">
-      <div class="modal-body" style="text-align:center; padding:32px 24px;">
-        <i class="fa-solid fa-triangle-exclamation"
-           style="font-size:2.2rem; color:#e07070; display:block; margin-bottom:12px;"></i>
-        <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; margin-bottom:8px;">
-          Confirmar exclusão
-        </h3>
-        <p id="textoConfirmacaoFunc"
-           style="font-size:0.87rem; color:var(--text-soft); margin-bottom:24px;">
-          Tem certeza que deseja excluir este funcionário?
+<div class="modal-overlay" id="modalFolga">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Lançar Folga / Recesso</h3>
+      <button class="modal-fechar" onclick="fecharModal('modalFolga')">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form id="formFolga">
+        <p style="font-size: 0.9rem; color: var(--text-soft); margin-bottom: 15px;">
+          Bloquear agenda do funcionário: <strong id="nomeFuncFolga"></strong>
         </p>
-        <div style="display:flex; gap:10px;">
-          <button class="btn-form-limpar" style="flex:1;"
-                  onclick="fecharModal('modalConfirmarExclusaoFunc')">
-            Cancelar
-          </button>
-          <button class="btn-excluir" style="flex:1; justify-content:center;"
-                  onclick="executarExclusaoFunc()">
-            <i class="fa-solid fa-trash"></i> Excluir
-          </button>
+        <div class="field">
+          <label for="dataFolga">Data do Bloqueio</label>
+          <input type="date" id="dataFolga" name="dataFolga" required />
         </div>
+        <div class="field">
+          <label for="motivoFolga">Motivo / Descrição</label>
+          <input type="text" id="motivoFolga" name="motivoFolga" placeholder="Ex: Folga Semanal, Curso, Recesso" required />
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <div class="form-btns" style="width:100%">
+        <button type="button" class="btn-form-limpar" onclick="fecharModal('modalFolga')">
+          <i class="fa-solid fa-xmark"></i> Cancelar
+        </button>
+        <button type="submit" class="btn-form-cadastrar" form="formFolga" style="background-color: #6a827f;">
+          <i class="fa-solid fa-check"></i> Bloquear Data
+        </button>
       </div>
     </div>
   </div>
+</div>
 
-  <script src="funcionario.js"></script>
+<div class="modal-overlay" id="modalConfirmarExclusaoFunc">
+  <div class="modal">
+    <div class="modal-body" style="text-align:center; padding:32px 24px;">
+      <i class="fa-solid fa-triangle-exclamation"
+         style="font-size:2.2rem; color:#e07070; display:block; margin-bottom:12px;"></i>
+      <h3 style="font-family:'Cormorant Garamond',serif; font-size:1.3rem; margin-bottom:8px;">
+        Confirmar exclusão
+      </h3>
+      <p id="textoConfirmacaoFunc"
+         style="font-size:0.87rem; color:var(--text-soft); margin-bottom:24px;">
+        Tem certeza que deseja excluir este funcionário?
+      </p>
+      <div style="display:flex; gap:10px;">
+        <button class="btn-form-limpar" style="flex:1;"
+                onclick="fecharModal('modalConfirmarExclusaoFunc')">
+          Cancelar
+        </button>
+        <button class="btn-excluir" style="flex:1; justify-content:center;"
+                onclick="executarExclusaoFunc()">
+          <i class="fa-solid fa-trash"></i> Excluir
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="funcionario.js"></script>
 </body>
 </html>

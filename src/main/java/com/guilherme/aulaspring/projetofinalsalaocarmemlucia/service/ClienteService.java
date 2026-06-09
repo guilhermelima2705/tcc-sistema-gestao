@@ -24,6 +24,10 @@ public class ClienteService {
         return repository.save(cliente);
     }
 
+    public Cliente buscarPorTelefonePuro(String telefone) {
+        return repository.findByTelefone(telefone).orElse(null);
+    }
+
     public Cliente atualizar(Cliente cliente) {
         if (cliente.getId() == null) {
             throw new IllegalArgumentException("Não é possível atualizar um cliente sem ID!");
