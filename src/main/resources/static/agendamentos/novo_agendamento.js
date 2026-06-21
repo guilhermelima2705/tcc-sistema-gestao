@@ -1,4 +1,4 @@
-// NOVO_AGENDAMENTO.JS - INTEGRADO COM SPRING BOOT
+// NOVO_AGENDAMENTO.JS - INTEGRADO COM SPRING BOOT (CORRIGIDO PARA PAGINAÇÃO)
 
 // MENU LATERAL — Abre o painel deslizante ao clicar no hambúrguer
 function abrirMenu() {
@@ -177,7 +177,7 @@ function filtrarClientes() {
 
   // Filtra na memória do navegador a partir do que veio do banco
   const clientesFiltrados = todosClientes.filter(c =>
-      c.nome.toLowerCase().includes(termoDigitado)
+      c.nome && c.nome.toLowerCase().includes(termoDigitado)
   );
 
   // Exibe o painel flutuante e renderiza a lista atualizada
@@ -193,7 +193,7 @@ document.addEventListener("click", function (e) {
   }
 });
 
-// 4. BUSCA AS LISTAS REAIS DO BANCO DE DADOS (CORRIGIDA)
+// 4. BUSCA AS LISTAS REAIS DO BANCO DE DADOS (CORRIGIDA PARA COMPATIBILIDADE COM PAGINAÇÃO)
 async function carregarListasDoBanco() {
   const token = sessionStorage.getItem("meuTccToken");
   const headers = {
@@ -202,10 +202,12 @@ async function carregarListasDoBanco() {
   };
 
   try {
-    // Busca os Clientes e guarda na variável global (Sem renderizar nada de início)
-    const resClientes = await fetch("/cliente", { headers });
+    // ✨ ALTERAÇÃO AQUI: Passamos page=0 e size=150 para capturar os clientes cadastrados da primeira página da paginação do Spring
+    const resClientes = await fetch("/cliente?page=0&size=150", { headers });
     if (resClientes.ok) {
-      todosClientes = await resClientes.json();
+      const dadosPaginados = await resClientes.json();
+      // ✨ ALTERAÇÃO AQUI: Acessamos a propriedade .content que carrega o array real de clientes
+      todosClientes = dadosPaginados.content || [];
     }
 
     // Busca os Serviços e preenche o select
